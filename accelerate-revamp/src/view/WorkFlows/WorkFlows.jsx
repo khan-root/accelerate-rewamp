@@ -9,7 +9,10 @@ import UserWorkFlows from './UserWorkFlows'
 
 const WorkFlows = () => {
     
-    const {workFlows, gettingWorkFlows, handleToggleStateValue, toggleStateValue} = useWorkFlowsServices()
+    const {workFlows, gettingWorkFlows, handleToggleStateValue, toggleStateValue,handleViewTemplate,
+        viewTemplate,handleToggleViewTemplate,handleToggleSubViewTemplate
+
+    } = useWorkFlowsServices()
 
     const generalData = workFlows?.general_array
     const userData = workFlows?.user_array
@@ -52,6 +55,10 @@ const WorkFlows = () => {
                 toggleStateValue === 1 ? 
                     <GeneralWorkFlow 
                         generalData= {generalData}
+                        handleViewTemplate= {handleViewTemplate}
+                        handleToggleViewTemplate= {handleToggleViewTemplate}
+                        viewTemplate= {viewTemplate}
+                        handleToggleSubViewTemplate= {handleToggleSubViewTemplate}
                     />
                     :
                     toggleStateValue == 2 ?
