@@ -7,6 +7,10 @@ const workFlowsServices = (set, get)=>({
     gettingWorkFlows:async()=>{
         try{
             const resposne = await workflowsApi.getAllWorkFlows()
+            const responseData = resposne.data 
+            if(resposne.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                set({workFlows: responseData.DB_DATA})
+            }
             console.log('response', resposne)
         }catch(err){
             console.log('err', err)

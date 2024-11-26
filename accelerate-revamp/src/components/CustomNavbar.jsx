@@ -40,7 +40,7 @@ const CustomNavbar = () => {
                         >
                             {location.pathname === ele.link && (
                             <motion.span
-                                layoutId="bubble"
+                                layoutId={`bubble-navbar`}
                                 className="absolute inset-0 z-10 bg-[#8bc9f8]"
                                 style={{ borderRadius: 9999 }}
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
