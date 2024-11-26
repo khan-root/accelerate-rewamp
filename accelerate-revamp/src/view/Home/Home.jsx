@@ -2,6 +2,8 @@ import React from 'react'
 import dashboardAnimation from '../../assets/images/dashboard.gif'
 import { Button } from '@material-tailwind/react'
 const Home = () => {
+    const jwt = process.env.REACT_APP_JWT_SECRET 
+    console.log('jwt', jwt)
   return (
     <div className='px-10 py-5 space-y-6'>
         <div className='text-[20px] text-black-300'>

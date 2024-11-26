@@ -7,9 +7,11 @@ import { motion } from 'framer-motion'
 import { NavLink, useLocation} from 'react-router-dom'
 import { IoMailOutline } from 'react-icons/io5'
 import { GoBell } from 'react-icons/go'
+import useHeaderServices from '../services/__headerServices'
 
 const CustomNavbar = () => {
     const location = useLocation()
+    const {backToHome, handleNavigation} = useHeaderServices()
   return (
     <Navbar className='sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-2 text-blue-gray-900'>
         <div className='flex items-center justify-between'>
@@ -20,8 +22,7 @@ const CustomNavbar = () => {
                         
                         src={logo}
                         alt="Logo"
-                        
-                        // onClick={backToHomeHandle}
+                        onClick={backToHome}
                         />
                     <span className='text-[22px] text-black-100 cursor-pointer'>Accelerate</span>
                 </div>
@@ -34,8 +35,8 @@ const CustomNavbar = () => {
                             style={{
                                 WebkitTapHighlightColor: "transparent",
                             }}
-                        // to={ele.link}
-                        // onClick={(e) => handleNavLinkClick(e, ele.link)}
+                        to={ele.link}
+                        onClick={() => handleNavigation(ele)}
                         >
                             {location.pathname === ele.link && (
                             <motion.span
