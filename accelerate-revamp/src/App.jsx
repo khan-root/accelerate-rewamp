@@ -1,10 +1,20 @@
-import { Button } from '@material-tailwind/react'
 import React from 'react'
+import CustomNavbar from './components/CustomNavbar'
+import { Router } from './Routers'
 
 const App = () => {
   return (
-    <div>
-      <Button>Hello</Button>
+    <div className='font-poppins flex flex-col h-screen w-screen'>
+      <div>
+        <CustomNavbar />
+      </div>
+      <div className='flex-1'>
+        <Router />
+      </div>
+      <div>
+        <span>Footer</span>
+      </div>
+
     </div>
   )
 }
