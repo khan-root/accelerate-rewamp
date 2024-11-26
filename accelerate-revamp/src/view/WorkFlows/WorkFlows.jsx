@@ -23,7 +23,7 @@ const WorkFlows = () => {
 
   return (
     <div className='px-10 py-5 space-y-6'>
-        <div className='text-[20px] text-black-300'>
+        <div className='text-[20px] text-customBlack-300'>
             <span>WorkFlows</span>
         </div>
         <div className='space-y-10'>
@@ -31,7 +31,7 @@ const WorkFlows = () => {
                 {toggleDataWorkFlows.map((ele)=>(
                     <div key={ele.id} 
                         className={`${
-                            toggleStateValue === ele.id? "text-white" : "hover:text-black/60 text-black-200"
+                            toggleStateValue === ele.id? "text-white" : "hover:text-customBlack/60 text-customBlack-200"
                         } relative rounded-full px-3 py-1.5 text-sm font-medium outline-sky-400 transition focus-visible:outline-2`}
                         style={{
                             WebkitTapHighlightColor: "transparent",
@@ -65,6 +65,10 @@ const WorkFlows = () => {
                     
                     <UserWorkFlows 
                         userData= {userData}
+                        handleViewTemplate= {handleViewTemplate}
+                        handleToggleViewTemplate= {handleToggleViewTemplate}
+                        viewTemplate= {viewTemplate}
+                        handleToggleSubViewTemplate= {handleToggleSubViewTemplate}
                     />
                 :
                 null

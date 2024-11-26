@@ -5,12 +5,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router';
 import { ThemeProvider } from '@material-tailwind/react';
+import { theme } from './Theme/Theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <ThemeProvider>
-
+    <ThemeProvider value={theme}>
       <App />
     </ThemeProvider>
   </BrowserRouter>

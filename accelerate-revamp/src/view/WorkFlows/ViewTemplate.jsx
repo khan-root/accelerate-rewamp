@@ -12,13 +12,13 @@ const ViewTemplate = (props) => {
             <div className='p-4 rounded-lg' style={{backgroundColor:prevFlowData.color_code}}>
                 <img src={prevFlowData?.icon} alt={`img-${prevFlowData.id}`}  className='h-[50px] w-[50px]'/>
             </div>
-            <span className='text-black-100 text-[20px]'>{prevFlowData?.name}</span>
+            <span className='text-customBlack-100 text-[20px]'>{prevFlowData?.name}</span>
         </div>
         <div className='flex items-center gap-4'>
             {toggleDataWorkFlowTemplate.map((ele)=>(
                 <div key={ele.id} 
                     className={`${
-                        viewTemplate?.toggleState === ele.id? "text-white" : "hover:text-black/60 text-black-200"
+                        viewTemplate?.toggleState === ele.id? "text-white" : "hover:text-customBlack/60 text-customBlack-200"
                     } relative rounded-full px-3 py-1.5 text-sm font-medium outline-sky-400 transition focus-visible:outline-2`}
                     style={{
                         WebkitTapHighlightColor: "transparent",
@@ -39,17 +39,46 @@ const ViewTemplate = (props) => {
         </div>
         {
             viewTemplate?.toggleState === 1 ?
-
             <div>
-                list
-            </div> 
+                <div className='flex items-center text-[20px] text-customBlack-100 text-center'>
+                    <div className='flex-[.2] text-center'>
+                        <span className=''>Position</span>
+                    </div>
+                    <div className='flex-1 text-start'>
+                        <span>Name</span>
+                    </div>
+                </div>
+                <div className='space-y-1'>
+                    {viewTemplate.data?.map((data, i)=>(
+                        <div key={i} className='flex items-center text-[16px] text-customBlack-100'>
+                            <div className='flex-[.2] text-center'>
+                                <span className=''>{data?.position}</span>
+                            </div>
+                            <div className='flex-1 text-start'>
+                                <span>{data?.name}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div> 
+            </div>
             :
             viewTemplate?.toggleState === 2 ?
 
-            <div>
-                flow
-            </div>
-
+            <div className="flex items-center gap-2 overflow-x-auto">
+                {viewTemplate.data?.map((data, i) => (
+                    <div
+                    key={i}
+                    className="flex-shrink-0 flex items-center text-[16px] text-customBlack-100 border border-customBlack text-white px-10 py-5 space-x-4 rounded-xl "
+                    style={{ backgroundColor: prevFlowData?.color_code }}
+                    >
+                    <div className="flex items-center justify-center gap-2 text-white text-[16px] font-semibold">
+                        <span>{data?.position}</span>
+                        <span>-</span>
+                        <span>{data?.name}</span>
+                    </div>
+                    </div>
+                ))}
+                </div>
             :
             null
         }

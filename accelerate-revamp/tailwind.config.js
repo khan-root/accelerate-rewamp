@@ -11,13 +11,13 @@ module.exports = withMT({
 
       },
       colors:{
-        blue:{
+        customBlue:{
           100:'#3da5f4',
           200:'#F6F9FF',
           300:'#F4F2FF',
 
         },
-        black:{
+        customBlack:{
           100:'#000000e6',
           200:'#00000080',
           300:'#535355',

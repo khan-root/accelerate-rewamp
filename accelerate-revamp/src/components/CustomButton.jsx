@@ -4,7 +4,7 @@ import React from 'react'
 const CustomButton = (props) => {
     const {title, loading, onClick, type} = props
   return (
-    <Button className='bg-blue-100 capitalize py-2 px-4 font-medium text-[12px]' loading={loading} onClick={onClick} type={type}>{title}</Button>
+    <Button className='bg-customBlue-100 capitalize py-2 px-4 font-medium text-[12px]' loading={loading} onClick={onClick} type={type}>{title}</Button>
   )
 }
 

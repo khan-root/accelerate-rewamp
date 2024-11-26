@@ -24,13 +24,13 @@ const CustomNavbar = () => {
                         alt="Logo"
                         onClick={backToHome}
                         />
-                    <span className='text-[22px] text-black-100 cursor-pointer'>Accelerate</span>
+                    <span className='text-[22px] text-customBlack-100 cursor-pointer'>Accelerate</span>
                 </div>
                 <div className='flex items-center gap-4'>
                     {headerData.map((ele)=>(
                         <NavLink key={ele.id} 
                             className={`${
-                                location.pathname === ele.link? "text-white" : "hover:text-black/60 text-black-200"
+                                location.pathname === ele.link? "text-white" : "hover:text-customBlack/60 text-customBlack-200"
                             } relative rounded-full px-3 py-1.5 text-sm font-medium outline-sky-400 transition focus-visible:outline-2`}
                             style={{
                                 WebkitTapHighlightColor: "transparent",
@@ -53,10 +53,10 @@ const CustomNavbar = () => {
             </div>
             <div className='flex items-center gap-4'>
                 <div className='flex items-center gap-5'>
-                    <span className='text-[20px] text-black-200'>
+                    <span className='text-[20px] text-customBlack-200'>
                         <IoMailOutline />
                     </span>
-                    <span className='text-[20px] text-black-200'>
+                    <span className='text-[20px] text-customBlack-200'>
                         <GoBell />
                     </span>
                 </div>
