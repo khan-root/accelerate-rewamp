@@ -1,9 +1,14 @@
 import { axiosInstance } from "../Base"
 
 const projectsApi = {
-    getProjects: function(){
+    getProjects: function(data){
         return axiosInstance.request({
-            method: "GET"
+            method: "GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_projects',
+                ...data
+            }
         })
     }
 }

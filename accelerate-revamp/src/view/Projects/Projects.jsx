@@ -5,9 +5,13 @@ import useProjectsServices from '../../viewModel/projectsViewModel/projectsServi
 import { projectToggleData } from '../../utils/projectsUtils'
 import { motion } from 'framer-motion'
 import { CgSearch } from 'react-icons/cg'
+import { calculateDaysLeft } from '../../services/__projectsServices'
+import ProjectsList from './ProjectsList'
 
 const Projects = () => {
-  const { projectState, toggleProjectsState} = useProjectsServices()
+  const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
+
+  const projectsData = projects?.projects_details
   return (
     <div className='px-10 py-5 space-y-6 '>
       <div className='text-[20px] text-customBlack-300'>
@@ -56,14 +60,13 @@ const Projects = () => {
       <div className='flex gap-4 items-center'>
         <div class="w-full max-w-sm min-w-[200px]">
           <div class="relative flex items-center">
-            {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="absolute w-5 h-5 top-2.5 left-2.5 text-customBlack-600">
-              <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-            </svg> */}
-            <span className="absolute w-5 h-5 top-2.5 left-2.5 text-customBlue-500"><CgSearch /></span>
-        
+            <span className="absolute w-5 h-5 top-2.5 left-2.5 text-customBlue-500"><CgSearch /></span>        
             <input
-            class="w-full bg-transparent placeholder:text-customBlack-400 text-customBlack-700 text-sm border-b border-b-customBlack-300  pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-b-customBlack-400 hover:border-b-customBlack-300  focus:shadow-bottom"
-            placeholder="Search" 
+              class="w-full bg-transparent placeholder:text-customBlack-400 text-customBlack-700 text-sm border-b border-b-customBlack-300  pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-b-customBlack-400 hover:border-b-customBlack-300  focus:shadow-bottom"
+              placeholder="Search" 
+              onChange={handleChangeSerachProjects}
+              name='serach'
+              value={projectState?.serach}
             />
           </div>
         </div>
@@ -71,14 +74,14 @@ const Projects = () => {
             {projectToggleData.map((ele)=>(
                 <div key={ele.id} 
                     className={`${
-                        projectState.state === ele.id? "text-white" : "hover:text-customBlack/60 text-customBlack-200 border-[.5px] border-customBlack-400"
+                        projectState.state === ele.value? "text-white" : "hover:text-customBlack/60 text-customBlack-200 border-[.5px] border-customBlack-400"
                     } relative rounded-full px-3 py-1.5 text-sm font-medium outline-sky-400 transition focus-visible:outline-2`}
                     style={{
                         WebkitTapHighlightColor: "transparent",
                     }}
                 onClick={() => toggleProjectsState(ele)}
                 >
-                    {projectState.state === ele.id && (
+                    {projectState.state === ele.value && (
                     <motion.span
                         layoutId={`bubble-projects`}
                         className="absolute inset-0 z-10 bg-[#8bc9f8]"
@@ -90,7 +93,17 @@ const Projects = () => {
                 </div>
             ))}
         </div>
+
       </div>
+        <div className='grid grid-cols-6 gap-6'>
+
+            {projectsData?.data?.map((ele)=>(
+              <ProjectsList 
+                key={ele.id}
+                ele = {ele}
+              />
+            ))}
+        </div>
     </div>
   )
 }
