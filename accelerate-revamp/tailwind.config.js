@@ -7,7 +7,7 @@ module.exports = withMT({
   theme: {
     extend: {
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
+        poppins: ['Poppins'],
 
       },
       colors:{

@@ -34,7 +34,7 @@ export const theme = {
           boxShadow: "shadow-2xl",
           color: "text-blue-gray-500",
           fontSmoothing: "antialiased",
-          fontFamily: "font-sans",
+          fontFamily: "font-poppins",
           fontSize: "text-base",
           fontWeight: "font-light",
           lineHeight: "leading-relaxed",
@@ -107,7 +107,7 @@ export const theme = {
           boxShadow: "shadow-2xl shadow-blue-gray-900/10",
         },
         container:{
-          backgroundColor: '#000'
+          backgroundColor: '#000',
         },
         overlay: {
           position: "fixed",

@@ -10,6 +10,16 @@ const projectsApi = {
                 ...data
             }
         })
+    },
+    projectDetails:function(data){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_project_details',
+                ...data
+            }
+        })
     }
 }
 

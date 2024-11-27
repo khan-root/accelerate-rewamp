@@ -13,7 +13,7 @@ import AddProject from './AddProject'
 
 const Projects = () => {
   const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
-  const { addProjectValue, handleAddProject, toggleAddProject } = useAddProjectServices()
+  const { addProjectValue, handleAddProject, toggleAddProject,toggleGeneralTemplateViewAdd } = useAddProjectServices()
 
   const projectsData = projects?.projects_details
   return (
@@ -124,10 +124,13 @@ const Projects = () => {
           open = {addProjectValue.show}
           closeDrawer = {toggleAddProject}
           compo ={
-            <AddProject />
+            <AddProject 
+              addProjectValue = {addProjectValue}
+              toggleGeneralTemplateViewAdd = {toggleGeneralTemplateViewAdd}
+            />
           }
           title="Create Project"
-          widthSize = {1100}
+          widthSize = {1150}
         />
       }
     </>

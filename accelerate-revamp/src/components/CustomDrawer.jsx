@@ -9,7 +9,7 @@ const CustomDrawer = (props) => {
     <Drawer 
       open={open} 
       onClose={closeDrawer}
-      className="px-4 py-2 customDrwerScroll h-full overflow-auto"
+      className="px-4 py-2 customDrwerScroll h-full overflow-auto font-poppins"
       placement={direction}
       size={widthSize}
       style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
