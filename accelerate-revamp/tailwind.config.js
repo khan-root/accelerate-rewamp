@@ -15,6 +15,7 @@ module.exports = withMT({
           100:'#3da5f4',
           200:'#F6F9FF',
           300:'#F4F2FF',
+          500:'#92C9FB',
 
         },
         customBlack:{
@@ -22,8 +23,17 @@ module.exports = withMT({
           200:'#00000080',
           300:'#535355',
           400:'#546078'
+        },
+        customPink:{
+          100:'#FF9E9E'
+        },
+        customPurple:{
+          100:'#AC9EFF'
         }
-      }
+      },
+      boxShadow: {
+        bottom: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      },
     },
   },
   plugins: [],

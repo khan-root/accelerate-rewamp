@@ -1,17 +1,23 @@
 import React from 'react'
 import { toggleDataWorkFlowTemplate } from '../../utils/workFlowsUtils'
 import {motion} from 'framer-motion'
+import { FaDiagramProject } from 'react-icons/fa6'
 
 const ViewTemplate = (props) => {
     const {viewTemplate,handleToggleSubViewTemplate} = props
-    console.log('viewTemplate', viewTemplate)
     const prevFlowData = viewTemplate?.prevFlowData
   return (
     <div className='space-y-4'>
         <div className='flex items-center gap-10'>
-            <div className='p-4 rounded-lg' style={{backgroundColor:prevFlowData.color_code}}>
-                <img src={prevFlowData?.icon} alt={`img-${prevFlowData.id}`}  className='h-[50px] w-[50px]'/>
-            </div>
+            {prevFlowData?.color_code ? 
+                <div className='p-4 rounded-lg' style={{backgroundColor:prevFlowData.color_code}}>
+                    <img src={prevFlowData?.icon} alt={`img-${prevFlowData.id}`}  className='h-[50px] w-[50px]'/>
+                </div>
+                :
+                <div className='flex items-center justify-center bg-customBlue-100 h-[50px] w-[50px] rounded-lg'>
+                    <span className='text-[20px] text-white'><FaDiagramProject /></span>
+                </div>
+            }
             <span className='text-customBlack-100 text-[20px]'>{prevFlowData?.name}</span>
         </div>
         <div className='flex items-center gap-4'>
@@ -67,9 +73,9 @@ const ViewTemplate = (props) => {
             <div className="flex items-center gap-2 overflow-x-auto">
                 {viewTemplate.data?.map((data, i) => (
                     <div
-                    key={i}
-                    className="flex-shrink-0 flex items-center text-[16px] text-customBlack-100 border border-customBlack text-white px-10 py-5 space-x-4 rounded-xl "
-                    style={{ backgroundColor: prevFlowData?.color_code }}
+                        key={i}
+                        className="flex-shrink-0 flex items-center text-[16px] text-customBlack-100 border border-customBlack text-white px-10 py-5 space-x-4 rounded-xl "
+                        style={{ backgroundColor: prevFlowData?.color_code ? prevFlowData?.color_code : '#3da5f4' }}
                     >
                     <div className="flex items-center justify-center gap-2 text-white text-[16px] font-semibold">
                         <span>{data?.position}</span>
