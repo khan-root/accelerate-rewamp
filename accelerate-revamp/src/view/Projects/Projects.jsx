@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { CgSearch } from 'react-icons/cg'
 import { calculateDaysLeft } from '../../services/__projectsServices'
 import ProjectsList from './ProjectsList'
+import { FaPlus } from 'react-icons/fa6'
 
 const Projects = () => {
   const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
@@ -96,10 +97,17 @@ const Projects = () => {
 
       </div>
         <div className='grid grid-cols-6 gap-6'>
+          
 
+
+            {(projectState.state === "active" || projectState.state === "all_projects" || projectState.state === "my_projects") &&
+              <div className='border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'>
+                <span className='text-[25px]'><FaPlus /></span>
+              </div>
+            }
             {projectsData?.data?.map((ele)=>(
               <ProjectsList 
-                key={ele.id}
+                key={ele?.id}
                 ele = {ele}
               />
             ))}
