@@ -20,7 +20,6 @@ const projectsServices = (set, get)=>({
                 const dbData = responseData.DB_DATA 
                 set({projects: dbData})
             }
-            console.log('response', response)
         } catch (error) {
             
         }

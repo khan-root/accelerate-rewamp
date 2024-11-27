@@ -13,7 +13,7 @@ const CustomNavbar = () => {
     const location = useLocation()
     const {backToHome, handleNavigation} = useHeaderServices()
   return (
-    <Navbar className='sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-2 text-blue-gray-900'>
+    <Navbar className='sticky top-0 z-10 h-max max-w-full !bg-transparent rounded-none px-4 py-2 lg:px-8 lg:py-2 text-blue-gray-900'>
         <div className='flex items-center justify-between'>
             <div className='flex items-center gap-14'>
                 <div className='flex items-center gap-2'>
@@ -23,7 +23,7 @@ const CustomNavbar = () => {
                         src={logo}
                         alt="Logo"
                         onClick={backToHome}
-                        />
+                    />
                     <span className='text-[22px] text-customBlack-100 cursor-pointer'>Accelerate</span>
                 </div>
                 <div className='flex items-center gap-4'>

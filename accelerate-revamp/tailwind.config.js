@@ -29,6 +29,9 @@ module.exports = withMT({
         },
         customPurple:{
           100:'#AC9EFF'
+        },
+        customGray:{
+          100:'#f8f9fa'
         }
       },
       boxShadow: {
