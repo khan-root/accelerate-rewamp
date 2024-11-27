@@ -1,1 +1,1 @@
-export const baseURL = "http://172.18.0.37/accelerate_v2/api";
+export const baseURL = "https://accelerate-bk.veevotech.com/api";
