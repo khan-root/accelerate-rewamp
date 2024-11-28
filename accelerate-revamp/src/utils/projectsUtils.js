@@ -12,12 +12,22 @@ export const projectVisiblityData = [
     {id:2, title:'Only Visible Employee working in this'},
 ]
 export const projectAccessData = [
-    {id:1, title:'Public'},
-    {id:2, title:'Private'},
+    {id:1, title:'Public', value:'PUBLIC'},
+    {id:2, title:'Private', value:'PRIVATE'},
 ]
 
 
 export const generalTemplateData = [
     {id:1, title:'General Templates'},
-    {id:2, title: 'Veevo Tech'}
+    {id:2, title: 'Veevo Tech'},
+    {id:3, title:'Sarmad Faizan'}
+]
+
+
+export const taskCreationData = [
+    {id:1, title:'Public', value:'PUBLIC'},
+    {id:2, title:'Project Members', value:'PRIVATE_MEMBERS'},
+    {id:3, title:'Only Managers', value:'MANAGER'},
+    {id:4, title:'Manager and Creator', value:'MANAGER_AND_CREATOR'},
+    {id:1, title:'Only Creator', value:'ONLY_CREATOR'},
 ]

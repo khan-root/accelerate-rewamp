@@ -31,7 +31,8 @@ module.exports = withMT({
           100:'#AC9EFF'
         },
         customGray:{
-          100:'#f8f9fa'
+          100:'#f8f9fa',
+          200:'#f8f9fe',
         }
       },
       boxShadow: {

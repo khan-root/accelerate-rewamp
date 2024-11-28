@@ -4,11 +4,11 @@ import { FaDiagramProject } from 'react-icons/fa6'
 import CustomDialog from '../../components/CustomDialog'
 import ViewTemplate from './ViewTemplate'
 const UserWorkFlows = (props) => {
-    const {userData, handleViewTemplate, viewTemplate, handleToggleViewTemplate, handleToggleSubViewTemplate} = props
+    const {orgData, handleViewTemplate, viewTemplate, handleToggleViewTemplate, handleToggleSubViewTemplate} = props
   return (
     <>
     <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-16'>
-        {userData?.map((ele, i)=>(
+        {orgData?.map((ele, i)=>(
             <div key={i} className='h-40 w-48 '>
                 <div className='flex flex-col items-center gap-4'>
                     <motion.div className='flex items-center justify-center bg-customBlue-100 h-full w-full p-8 rounded-lg cursor-pointer'

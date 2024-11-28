@@ -15,7 +15,10 @@ const WorkFlows = () => {
     } = useWorkFlowsServices()
 
     const generalData = workFlows?.general_array
-    const userData = workFlows?.user_array
+    const orgData = workFlows?.org_array
+
+
+
 
     useEffect(()=>{
         gettingWorkFlows()
@@ -61,10 +64,10 @@ const WorkFlows = () => {
                         handleToggleSubViewTemplate= {handleToggleSubViewTemplate}
                     />
                     :
-                    toggleStateValue == 2 ?
+                    toggleStateValue === 2 ?
                     
                     <UserWorkFlows 
-                        userData= {userData}
+                        orgData= {orgData}
                         handleViewTemplate= {handleViewTemplate}
                         handleToggleViewTemplate= {handleToggleViewTemplate}
                         viewTemplate= {viewTemplate}

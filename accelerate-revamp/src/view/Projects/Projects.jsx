@@ -13,7 +13,13 @@ import AddProject from './AddProject'
 
 const Projects = () => {
   const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
-  const { addProjectValue, handleAddProject, toggleAddProject,toggleGeneralTemplateViewAdd } = useAddProjectServices()
+  const { addProjectValue, handleAddProject, toggleAddProject,toggleGeneralTemplateViewAdd,
+    handleAddOwnerToggle,handleAddWorkFlowToggle,
+    handleChangeAddProject,addExtraPhase,removePhase,
+    addWorkFlow,addOwner,handleSelectAddProject,
+    handleSelectTemplate,handleColorPickerToggle,pickerRef,
+    handleAddNewProject
+   } = useAddProjectServices()
 
   const projectsData = projects?.projects_details
   return (
@@ -127,6 +133,20 @@ const Projects = () => {
             <AddProject 
               addProjectValue = {addProjectValue}
               toggleGeneralTemplateViewAdd = {toggleGeneralTemplateViewAdd}
+              handleAddOwnerToggle = {handleAddOwnerToggle}
+              handleAddWorkFlowToggle = {handleAddWorkFlowToggle}
+              addExtraPhase = {addExtraPhase}
+              handleChangeAddProject = {handleChangeAddProject}
+              removePhase = {removePhase}
+              addWorkFlow = {addWorkFlow}
+              addOwner = {addOwner}
+              handleSelectAddProject = {handleSelectAddProject}
+              handleSelectTemplate = {handleSelectTemplate}
+              handleColorPickerToggle = {handleColorPickerToggle}
+              pickerRef = {pickerRef}
+              handleAddNewProject = {handleAddNewProject}
+
+
             />
           }
           title="Create Project"
