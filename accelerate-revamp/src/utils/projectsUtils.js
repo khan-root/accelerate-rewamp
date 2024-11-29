@@ -1,3 +1,6 @@
+import { HiMiniTrash } from "react-icons/hi2"
+import { MdModeEdit } from "react-icons/md"
+
 export const projectToggleData = [
     {id:1, title: 'Active Projects', value:'active'},
     {id:2, title: 'All Projects', value:'all_projects'},
@@ -30,4 +33,11 @@ export const taskCreationData = [
     {id:3, title:'Only Managers', value:'MANAGER'},
     {id:4, title:'Manager and Creator', value:'MANAGER_AND_CREATOR'},
     {id:1, title:'Only Creator', value:'ONLY_CREATOR'},
+]
+
+
+
+export const projectActonList = [
+    {id:1, title:'Edit Team', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
+    {id:2, title:'Delete Team', icon:<HiMiniTrash />, color:'text-red-600'}
 ]

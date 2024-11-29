@@ -17,7 +17,7 @@ const Teams = () => {
         <span>Teams</span>
       </div>
 
-      <div className='grid grid-cols-6 gap-6'>
+      <div className='grid grid-cols-7 gap-6'>
         <div className='h-[200px] border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'
           // onClick={handleAddProject}
         >

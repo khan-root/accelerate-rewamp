@@ -8,10 +8,10 @@ import Projects from '../view/Projects/Projects'
 const Routers = () => {
   return (
     <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/teams' element={<Teams />} />
-        <Route path='/workflows' element={<WorkFlows />} />
-        <Route path='/projects' element={<Projects />} />
+      <Route path='/' element={<Home />} />
+      <Route path='/teams' element={<Teams />} />
+      <Route path='/workflows' element={<WorkFlows />} />
+      <Route path='/projects' element={<Projects />} />
     </Routes>
   )
 }
