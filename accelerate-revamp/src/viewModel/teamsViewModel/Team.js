@@ -19,6 +19,10 @@ const teamsServices = (set, get)=>({
     },
     updatingTeamColor: (id, color)=>{
         set({allTeams: get().allTeams.map((ele)=> ele.id === id ? {...ele,color_code: color } : ele)})
+    },
+    updateTeamName: (id, name)=>{
+        console.log('adasda', get().allTeams)
+        set({allTeams: get().allTeams.map((ele)=> ele.id === id ? {...ele,name: name } : ele)})
     }
 })
 

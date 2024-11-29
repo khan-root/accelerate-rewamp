@@ -19,6 +19,16 @@ const teamsApi = {
                 ...data
             }
         })
+    },
+    updateTeam:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            data:{
+                'operation':'edit_team',
+                ...data
+            }
+        })
     }
 }
 

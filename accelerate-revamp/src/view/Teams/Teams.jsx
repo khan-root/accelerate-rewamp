@@ -7,7 +7,10 @@ import useActionTeamService from '../../viewModel/teamsViewModel/TemaActionServi
 const Teams = () => {
 
   const {gettingAllTeams, allTeams} = useTeamsServices()
-  const {teamActionValue,handleChangeTeamAction,updateTeamColor} = useActionTeamService()
+  const {teamActionValue,handleChangeTeamAction,updateTeamColor,handleTeamActionList,handleOpenMenu,
+    toggleEditTeam,handleUpdateTeam
+
+  } = useActionTeamService()
 
   useEffect(()=>{
     gettingAllTeams()
@@ -32,6 +35,10 @@ const Teams = () => {
               teamActionValue = {teamActionValue}
               handleChangeTeamAction= {handleChangeTeamAction}
               updateTeamColor= {updateTeamColor}
+              handleTeamActionList= {handleTeamActionList}
+              handleOpenMenu= {handleOpenMenu}
+              toggleEditTeam= {toggleEditTeam}
+              handleUpdateTeam= {handleUpdateTeam}
             />
           ))}
       </div>
