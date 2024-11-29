@@ -16,6 +16,9 @@ const teamsServices = (set, get)=>({
         } catch (error) {
             
         }
+    },
+    updatingTeamColor: (id, color)=>{
+        set({allTeams: get().allTeams.map((ele)=> ele.id === id ? {...ele,color_code: color } : ele)})
     }
 })
 

@@ -7,23 +7,17 @@ import useMouseHoverService from '../../services/__mouseHoverService'
 import { Button, Card, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import Wheel from '@uiw/react-color-wheel';
 import { projectActonList } from '../../utils/projectsUtils'
-import CustomButton from '../../components/CustomButton'
 
 
 const TeamsList = (props) => {
-    const {ele} = props
+    const {ele, handleChangeTeamAction, teamActionValue,updateTeamColor} = props
     const oneid = 10268458
     const {isHovered, handleMouseEnter, handleMouseLeave} = useMouseHoverService()
     const [openMenu, setOpenMenu] = React.useState(false);
-    const [selectedColor, setSelectedColor] = useState('#fff')
     
 
 
-    const testColor = (e)=>{
-        console.log('e', e)
-        setSelectedColor(e.hex)
-    }
-
+   
 
   return (
     <div className='flex flex-col gap-2'>
@@ -60,8 +54,8 @@ const TeamsList = (props) => {
                                 <Typography variant="h6" color="blue-gray" className="mb-1">Choose Color</Typography>
                                 
                                 <Wheel
-                                    color={selectedColor}
-                                    onChange={(e)=>testColor(e)}
+                                    color={teamActionValue?.color}
+                                    onChange={(e)=>handleChangeTeamAction(e)}
                                 />
                                 
                         
@@ -83,7 +77,7 @@ const TeamsList = (props) => {
                                     {/* <CustomButton 
                                         title='Update Color'
                                     /> */}
-                                    <Button style={{backgroundColor: selectedColor}} className='text-white'>Update Color</Button>
+                                    <Button style={{backgroundColor: teamActionValue?.color}} className='text-white' onClick={()=>updateTeamColor(ele)}>Update Color</Button>
                                 </div>
                             </ul>
                         </MenuList>

@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import useTeamsServices from '../../viewModel/teamsViewModel/teamsServices'
 import { FaPlus } from 'react-icons/fa6'
 import TeamsList from './TeamsList'
+import useActionTeamService from '../../viewModel/teamsViewModel/TemaActionServices'
 
 const Teams = () => {
 
   const {gettingAllTeams, allTeams} = useTeamsServices()
+  const {teamActionValue,handleChangeTeamAction,updateTeamColor} = useActionTeamService()
 
   useEffect(()=>{
     gettingAllTeams()
@@ -27,6 +29,9 @@ const Teams = () => {
             <TeamsList 
               key={ele?.id}
               ele = {ele}
+              teamActionValue = {teamActionValue}
+              handleChangeTeamAction= {handleChangeTeamAction}
+              updateTeamColor= {updateTeamColor}
             />
           ))}
       </div>

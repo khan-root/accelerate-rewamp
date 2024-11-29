@@ -9,6 +9,16 @@ const teamsApi = {
                 'operation':'get_teams'
             }
         })
+    },
+    updateTeamColor:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            data:{
+                'operation':'update_team_color',
+                ...data
+            }
+        })
     }
 }
 
