@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { DMYT } from '../../services/__dateTimeServices'
 import { LuClock5 } from 'react-icons/lu'
 import { HiDotsVertical } from 'react-icons/hi'
@@ -90,10 +90,6 @@ const TeamsList = (props) => {
                                     ))}
                                     
                                     <div className='flex items-center justify-between'>
-                                        {/* <span className='h-10 w-20 rounded-xl flex' style={{backgroundColor:selectedColor}}></span> */}
-                                        {/* <CustomButton 
-                                            title='Update Color'
-                                        /> */}
                                         <Button style={{backgroundColor: teamActionValue?.color}} className='text-white' onClick={()=>updateTeamColor(ele)}
                                             loading={teamActionValue?.loadingState === "update-color"}
                                             >Update Color</Button>
@@ -107,16 +103,14 @@ const TeamsList = (props) => {
             </motion.div>
             <div className='flex flex-col items-center gap-1'>
                 <span className='text-customBlack-400 text-[17px] text-center'>{ele?.name}</span>
-                <span className='text-customBlack-400 text-[13px] text-center'>added By: {ele?.owner_name}</span>
+                <span className='text-customBlack-400 text-[13px] text-center'>Added By: {ele?.owner_name}</span>
                 <div className='flex flex-row items-center gap-2'>
                     <span><LuClock5 /></span>
                     <span className='text-customBlack-400 text-[13px]'>{DMYT(ele?.entry_time)}</span>
                 </div>
             </div>
-        </div>
-
         {teamActionValue?.showDialog &&
-            (<CustomDialog 
+            <CustomDialog 
                 openDialog = {teamActionValue?.showDialog}
                 handleOpen = {toggleEditTeam}
                 title='Edit Team'
@@ -130,27 +124,28 @@ const TeamsList = (props) => {
                 outsidePress={false}
                 size="sm"
             
-            />)
+            />
         }
         {teamActionValue?.deleteConfirmation &&
-            (<ConfirmationDialog 
+            <ConfirmationDialog 
                 openDialog = {teamActionValue?.deleteConfirmation}
                 handleOpen = {toggleDeleteTeam}
                 title='Delete Confirmation'
                 outsidePress={false}
-                message="Are You sure, You want to Delete this Team ?"
+                message="Are you sure, you want to Delete this Team ?"
                 size="sm"
                 loading={teamActionValue?.loadingState === "delete-team"}
                 handleConfirm={handleDeleteTeam}
             
-            />)
+            />
         }
+        </div>
+
     </>
   )
 }
 
 
-export default TeamsList
 function EditTeam (props){
     const {handleChangeTeamAction, teamActionValue,handleUpdateTeam} = props
     return(
@@ -176,3 +171,4 @@ function EditTeam (props){
         </div>
     )
 }
+export default TeamsList

@@ -5,7 +5,7 @@ const ConfirmationDialog = (props) => {
     const { openDialog , handleOpen, title, message, handleConfirm, loading=false, size=true, outsidePress=true } = props
 
     return (
-      <Dialog open={openDialog} handler={handleOpen} size={size ? "xs" :"md"} dismiss={{ outsidePress: outsidePress }} className='relative z-100'>
+      <Dialog open={openDialog} handler={handleOpen} size={size ? "xs" :"md"} dismiss={{ outsidePress: outsidePress }}>
         <DialogHeader className='justify-center text-[20px]'>{title} </DialogHeader>
         <hr className="border-t border-gray-300" />
         <DialogBody className='text-center text-[15px]'>{message}</DialogBody>

@@ -22,8 +22,8 @@ export const theme = {
           left: 0,
           width: "w-screen",
           height: "h-screen",
-          backgroundColor: "bg-black",
-          backgroundOpacity: "bg-opacity-60",
+          backgroundColor: "bg-[#000]",
+          backgroundOpacity: "bg-opacity-30",
           backdropFilter: "backdrop-blur-sm",
         },
         container: {
