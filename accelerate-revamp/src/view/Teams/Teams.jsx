@@ -8,7 +8,8 @@ const Teams = () => {
 
   const {gettingAllTeams, allTeams} = useTeamsServices()
   const {teamActionValue,handleChangeTeamAction,updateTeamColor,handleTeamActionList,handleOpenMenu,
-    toggleEditTeam,handleUpdateTeam
+    toggleEditTeam,handleUpdateTeam,
+    handleDeleteTeam,toggleDeleteTeam
 
   } = useActionTeamService()
 
@@ -39,6 +40,8 @@ const Teams = () => {
               handleOpenMenu= {handleOpenMenu}
               toggleEditTeam= {toggleEditTeam}
               handleUpdateTeam= {handleUpdateTeam}
+              toggleDeleteTeam= {toggleDeleteTeam}
+              handleDeleteTeam= {handleDeleteTeam}
             />
           ))}
       </div>

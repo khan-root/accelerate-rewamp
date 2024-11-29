@@ -9,6 +9,7 @@ const useActionTeamService = ()=>{
 
     const updatingTeamColor = useStore((state)=> state.updatingTeamColor)
     const updateTeamName = useStore((state)=> state.updateTeamName)
+    const deleteTeam = useStore((state)=> state.deleteTeam)
     const {isHovered, handleMouseEnter, handleMouseLeave} = useMouseHoverService()
 
     const [teamActionValue, setTeamActionValue] = useState({
@@ -18,7 +19,7 @@ const useActionTeamService = ()=>{
         name:'',
         confirm:false, 
         showDialog:false,
-        openMenu:false
+        deleteConfirmation:false
     })
 
 
@@ -84,6 +85,13 @@ const useActionTeamService = ()=>{
                     id:data.id
                 }))
                 break;
+            case 2:
+                setTeamActionValue((prevState)=>({
+                    ...prevState,
+                    deleteConfirmation:true,
+                    id:data.id
+                }))
+                break;
         
             default:
                 break;
@@ -99,14 +107,16 @@ const useActionTeamService = ()=>{
             name:''
         }))
     }
-
-
-    const handleOpenMenu = ()=>{
+    const toggleDeleteTeam = ()=>{
         setTeamActionValue((prevState)=>({
             ...prevState,
-            openMenu: !prevState.openMenu
+            deleteConfirmation:false,
+            id:''
         }))
     }
+
+
+    
 
 
     const handleUpdateTeam = async()=>{
@@ -151,14 +161,49 @@ const useActionTeamService = ()=>{
     }
 
 
+    const handleDeleteTeam = async()=>{
+
+        const apiData = {
+            id: teamActionValue.id 
+        }
+
+        setTeamActionValue((prevState)=>({
+            ...prevState, 
+            loadingState:'delete-team'
+        }))
+        try {
+            const response = await teamsApi.deleteTeam(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS ==="SUCCESSFUL"){
+                showToast("Team Deleted Successfully", 'success')
+                toggleDeleteTeam()
+                deleteTeam(teamActionValue.id)
+            }else{
+                const error = error.ERROR_DESCRIPTION
+                showToast(error, 'error')
+            }
+        } catch (error) {
+            
+        }finally{
+            setTeamActionValue((prevState)=>({
+                ...prevState, 
+                loadingState:''
+            }))
+        }
+
+    }
+
+
     return {
         teamActionValue,
         updateTeamColor,
         handleChangeTeamAction,
-        handleTeamActionList,handleOpenMenu,
+        handleTeamActionList,
         isHovered, handleMouseEnter, handleMouseLeave,
         toggleEditTeam,
-        handleUpdateTeam
+        handleUpdateTeam,
+        handleDeleteTeam,
+        toggleDeleteTeam
     }
 
 }

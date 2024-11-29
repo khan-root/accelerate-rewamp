@@ -9,10 +9,11 @@ import Wheel from '@uiw/react-color-wheel';
 import { projectActonList } from '../../utils/projectsUtils'
 import CustomDialog from '../../components/CustomDialog'
 import CustomButton from '../../components/CustomButton'
+import ConfirmationDialog from '../../components/ConfirmationDialog'
 
 
 const TeamsList = (props) => {
-    const {ele, handleChangeTeamAction, teamActionValue,updateTeamColor,handleTeamActionList, toggleEditTeam,handleUpdateTeam} = props
+    const {ele, handleChangeTeamAction, teamActionValue,updateTeamColor,handleTeamActionList, toggleEditTeam,handleUpdateTeam, toggleDeleteTeam,handleDeleteTeam} = props
     const oneid = 10268458
     const {isHovered, handleMouseEnter, handleMouseLeave} = useMouseHoverService()
     
@@ -51,7 +52,7 @@ const TeamsList = (props) => {
                                     <HiDotsVertical />
                                 </Button>
                             </MenuHandler>
-                            <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid -mt-1">
+                            <MenuList className="hidden w-[32rem] grid-cols-7 gap-4 overflow-visible lg:grid -mt-1">
                                 <Card
                                     className="col-span-3 flex h-full w-full items-center justify-center shadow-none"
                                 >
@@ -64,13 +65,18 @@ const TeamsList = (props) => {
                                     
                             
                                 </Card>
-                                <ul className="col-span-4 flex w-full flex-col gap-1">
+                                <ul className="col-span-4 flex w-full flex-col gap-2">
                                     {projectActonList.map(({ title, icon, id, color }) => (
                                         <MenuItem key={id}>
                                         
                                     
                                             <div className='flex items-center justify-between'>
-                                                <Typography variant="h6" color="blue-gray" className="mb-1">
+                                                <Typography variant="h6" color="blue-gray" className="mb-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent the event from bubbling up
+                                                        handleTeamActionList(ele, id);
+                                                    }}
+                                                >
                                                     {title}
                                                 </Typography>
                                                 <span className={`${color}`}
@@ -123,6 +129,19 @@ const TeamsList = (props) => {
                 }
                 outsidePress={false}
                 size="sm"
+            
+            />)
+        }
+        {teamActionValue?.deleteConfirmation &&
+            (<ConfirmationDialog 
+                openDialog = {teamActionValue?.deleteConfirmation}
+                handleOpen = {toggleDeleteTeam}
+                title='Delete Confirmation'
+                outsidePress={false}
+                message="Are You sure, You want to Delete this Team ?"
+                size="sm"
+                loading={teamActionValue?.loadingState === "delete-team"}
+                handleConfirm={handleDeleteTeam}
             
             />)
         }

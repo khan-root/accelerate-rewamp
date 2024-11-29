@@ -29,6 +29,16 @@ const teamsApi = {
                 ...data
             }
         })
+    },
+    deleteTeam:function(data){
+        return axiosInstance.request({
+            method:"DELETE",
+            url:'/set_data.php',
+            params:{
+                'operation':'delete_record',
+                ...data
+            }
+        })
     }
 }
 
