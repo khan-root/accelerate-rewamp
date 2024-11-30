@@ -39,7 +39,17 @@ const teamsApi = {
                 ...data
             }
         })
-    }
+    },
+    teamDetails:function(data){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_team_details',
+                ...data
+            }
+        })
+    },
 }
 
 

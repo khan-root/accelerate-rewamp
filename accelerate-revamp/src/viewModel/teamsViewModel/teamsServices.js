@@ -1,5 +1,6 @@
 import { useState } from "react"
 import useStore from "../../Store/Store"
+import teamsApi from "../../Model/Teams/Teams"
 
 const useTeamsServices = ()=>{
 
@@ -8,20 +9,36 @@ const useTeamsServices = ()=>{
 
 
     const [viewTeamValue, setViewTeamValue] = useState({
-        show:false, 
+        showViewTeam:false, 
         state:1, 
         data:[],
-
+        teamInfo:{}
     })
 
     
 
 
-    const handleViewTeam = ()=>{
-        setViewTeamValue((prevState)=>({
-            ...prevState,
-            show:true
-        }))
+    const handleViewTeam = async(data)=>{
+        const apiData = {
+            id: data.id
+        }
+
+        try {
+            const response = await teamsApi.teamDetails(apiData)
+            console.log('response', response)
+            const responseData = response.data
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA 
+                setViewTeamValue((prevState)=>({
+                    ...prevState,
+                    showViewTeam:true,
+                    teamInfo:data,
+                    data: dbData
+                }))
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -29,17 +46,23 @@ const useTeamsServices = ()=>{
     const toggleViewTeam =()=>{
         setViewTeamValue((prevState)=>({
             ...prevState,
-            show:false,
-            data:[]
+            showViewTeam:false,
+            data:[],
+            teamInfo:{}
+            
         }))
     }
 
 
     return {
         allTeams,
-        gettingAllTeams
+        gettingAllTeams,
+        viewTeamValue,
+        handleViewTeam,
+        toggleViewTeam
     }
 
 }
 
 export default useTeamsServices
+

@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import dashboardAnimation from '../../assets/images/dashboard.gif'
 import { Button } from '@material-tailwind/react'
+import Calendar from './Calendar'
+import useHomeServices from '../../viewModel/homeViewModel/homeServices'
 const Home = () => {
+
+    const {calendarData,getInComingTasks, getCalendarTaskLabel} = useHomeServices()
+
+    useEffect(()=>{
+        getInComingTasks()
+    },[])
   return (
     <div className='px-10 py-5 space-y-6'>
         <div className='text-[20px] text-customBlack-300'>
@@ -19,6 +27,13 @@ const Home = () => {
                 style={{
                     height:"200px"
                 }}
+            />
+        </div>
+
+        <div className='border border-customBlue-300 flex justify-between p-4 w-[70%] rounded-lg'>
+            <Calendar 
+                calendarData = {calendarData}
+                getCalendarTaskLabel = {getCalendarTaskLabel}
             />
         </div>
     </div>

@@ -52,9 +52,7 @@ const CreateTeam = (props) => {
             
                 <div className='flex flex-col gap-2'>
                     <label className='text-[#698592] text-[15px]'>Invite With</label>
-                    <label className='text-[#698592] text-[13px]'>To invite team in bulk add comma after email address</label>
-                    <label className='text-[#698592] text-[13px]'>After email typing press "Enter" , to add more Emails</label>
-                    
+                    <label className='text-[#698592] text-[13px] font-semibold'>Press 'Enter' after typing an email to add more emails.</label>
                     
                     <div className='space-y-1 h-full'>
                         <input 

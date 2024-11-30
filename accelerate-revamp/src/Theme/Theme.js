@@ -22,7 +22,7 @@ export const theme = {
           left: 0,
           width: "w-screen",
           height: "h-screen",
-          backgroundColor: "bg-[#000]",
+          backgroundColor: "bg-black",
           backgroundOpacity: "bg-opacity-30",
           backdropFilter: "backdrop-blur-sm",
         },

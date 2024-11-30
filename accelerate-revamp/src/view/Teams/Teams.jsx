@@ -7,9 +7,15 @@ import useCreateTeamServices from '../../viewModel/teamsViewModel/createTeamServ
 import CustomDrawer from '../../components/CustomDrawer'
 import CreateTeam from './CreateTeam'
 import { motion } from 'framer-motion'
+import CustomDialog from '../../components/CustomDialog'
+import ViewTeam from './ViewTeam'
+import ConfirmationDialog from '../../components/ConfirmationDialog'
+import EditTeam from './EditTeam'
 const Teams = () => {
 
-  const {gettingAllTeams, allTeams} = useTeamsServices()
+  const {gettingAllTeams, allTeams,handleViewTeam, toggleViewTeam, viewTeamValue} = useTeamsServices()
+
+
   const {teamActionValue,handleChangeTeamAction,updateTeamColor,handleTeamActionList,
     toggleEditTeam,handleUpdateTeam,
     handleDeleteTeam,toggleDeleteTeam
@@ -44,18 +50,15 @@ const Teams = () => {
           </motion.div>
             {allTeams?.map((ele, i)=>(
               <TeamsList 
-                index={i}
+                
                 key={ele?.id}
                 ele = {ele}
                 teamActionValue = {teamActionValue}
                 handleChangeTeamAction= {handleChangeTeamAction}
                 updateTeamColor= {updateTeamColor}
                 handleTeamActionList= {handleTeamActionList}
-                
-                toggleEditTeam= {toggleEditTeam}
-                handleUpdateTeam= {handleUpdateTeam}
-                toggleDeleteTeam= {toggleDeleteTeam}
-                handleDeleteTeam= {handleDeleteTeam}
+                handleViewTeam = {handleViewTeam}
+
               />
             ))}
         </div>
@@ -76,6 +79,50 @@ const Teams = () => {
           widthSize={650}
         />
       }
+      {viewTeamValue.showViewTeam && 
+        <CustomDialog 
+          openDialog ={viewTeamValue.showViewTeam}
+          handleOpen = {toggleViewTeam}
+          title = {`View ${viewTeamValue?.teamInfo?.name} Team`}
+          compo = {
+            <ViewTeam 
+              viewTeamValue = {viewTeamValue}
+            />
+          }
+          outsidePress = {false}
+        />
+      }
+      {teamActionValue?.showDialog &&
+            <CustomDialog 
+                openDialog = {teamActionValue?.showDialog}
+                handleOpen = {toggleEditTeam}
+                title='Edit Team'
+                compo = {
+                    <EditTeam 
+                        teamActionValue ={teamActionValue}
+                        handleChangeTeamAction = {handleChangeTeamAction}
+                        handleUpdateTeam = {handleUpdateTeam}
+                    />
+                }
+                outsidePress={false}
+                size="sm"
+            
+            />
+        }
+        {teamActionValue?.deleteConfirmation &&
+            <ConfirmationDialog 
+                openDialog = {teamActionValue?.deleteConfirmation}
+                handleOpen = {toggleDeleteTeam}
+                title='Delete Confirmation'
+                outsidePress={false}
+                message="Are you sure, you want to Delete this Team ?"
+                size="sm"
+                loading={teamActionValue?.loadingState === "delete-team"}
+                handleConfirm={handleDeleteTeam}
+                
+            
+            />
+        }
     </>
   )
 }
