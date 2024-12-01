@@ -22,38 +22,16 @@ const useHomeServices = ()=>{
         year:{value:currentYearIndex, label:currentYearIndex},
         currentDate:getCurrentMonthObject(new Date()),
         
-        daysAttr:[
-                {
-                    id: 1571,
-                    title: "Thursday Task",
-                    start: 1735638300,
-                    end: 1735638300,
-                    startEditable: false,
-                    selectable: false,
-                    className: "event_incoming-tab"
-                },
-            
-            ]
+        daysAttr:[]
     })
 
 
-    // useEffect(()=>{
-    //     setCalendarData((prevState)=>({
-    //         ...prevState,
-    //         daysAttr:[
-    //             {
-    //                 id: 1571,
-    //                 title: "Thursday Task",
-    //                 start: 1735638300,
-    //                 end: 1735638300,
-    //                 startEditable: false,
-    //                 selectable: false,
-    //                 className: "event_incoming-tab"
-    //             },
-            
-    //         ]
-    //     }))
-    // },[inComingTasks])
+    useEffect(()=>{
+        setCalendarData((prevState)=>({
+            ...prevState,
+            daysAttr:inComingTasks?.calender_task
+        }))
+    },[inComingTasks])
 
 
 
@@ -107,16 +85,31 @@ const useHomeServices = ()=>{
         const tasks = calendarData?.daysAttr?.find(
             (att) => DDY(att.start) === dateString
         );
+        // console.log('tasks', tasks)
+    
+        return tasks ? tasks.title : null;
+    };
+
+
+    const getCalendarTasks = (day, month, year)=>{
+        const dateString = `${String(day).padStart(2, "0")}-${String(
+            month +1
+        ).padStart(2, "0")}-${year}`; // Use passed month and year
+        
+        const tasks = calendarData?.daysAttr?.find(
+            (att) => DDY(att.start) === dateString
+        );
         console.log('tasks', tasks)
     
-        // return tasks ? tasks.att_label : null;
-    };
+        // return tasks ? tasks : null;
+    }
 
 
 
     return {
         calendarData, getInComingTasks,
-        getCalendarTaskLabel
+        getCalendarTaskLabel,
+        getCalendarTasks
     }
 
 

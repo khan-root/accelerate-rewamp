@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { calendarToggleData } from '../../utils/homeUtils';
 import useTabToggle from '../../services/__tabToggleService';
+import { hexToRGBA, titleNameAlpha } from '../../services/__colorServices';
 
 const Calendar = (props) => {
     const {tabToggleState, currentState} = useTabToggle()
-    const { calendarData, getCalendarTaskLabel} = props;
+    const { calendarData, getCalendarTaskLabel, getCalendarTasks} = props;
     const today = new Date(); // Current date
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -76,6 +77,9 @@ const Calendar = (props) => {
 
                 {calendarData?.daysArray?.map((day, index) => {
                     const attLabel = getCalendarTaskLabel(day, calendarData.month.value - 1, calendarData.year.value);
+                    const colors = titleNameAlpha(attLabel)
+                    const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
+                    const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
                     const isToday =
                     day === today.getDate() &&
                     today.getMonth() === calendarData.month.value - 1;
@@ -87,17 +91,20 @@ const Calendar = (props) => {
                         <motion.div
                             whileHover={{ scale: 1.1 }}
                             key={index}
-                            className={`w-full h-[100px] flex flex-col rounded-xl relative cursor-pointer p-4 ${
+                            className={`w-full h-[100px] flex flex-col rounded-xl relative cursor-pointer ${
                                 isWeekend
                                 ? "!bg-[#FDEFEE]"
                                 : "hover:border hover:border-customGray-blueGray bg-[#F9FAFC]"
+
                             }`}
+
+                            style={{color: colors?.bgColor ? colors?.bgColor : "", backgroundColor: colors?.bgColor ? rgbaColor : ""}}
                         >
-                            <span className='text-[20px] text-customBlack-400'>
+                            <span className='text-[20px] flex-1 flex items-start ps-3 pt-2'>
                                 {day}
 
                             </span>
-                            <span>
+                            <span className='flex-1 flex items-start ps-3'>
                                 Tasks
                             </span>
                         </motion.div>

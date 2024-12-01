@@ -5,7 +5,7 @@ import Calendar from './Calendar'
 import useHomeServices from '../../viewModel/homeViewModel/homeServices'
 const Home = () => {
 
-    const {calendarData,getInComingTasks, getCalendarTaskLabel} = useHomeServices()
+    const {calendarData,getInComingTasks, getCalendarTaskLabel,getCalendarTasks} = useHomeServices()
 
     useEffect(()=>{
         getInComingTasks()
@@ -34,6 +34,7 @@ const Home = () => {
             <Calendar 
                 calendarData = {calendarData}
                 getCalendarTaskLabel = {getCalendarTaskLabel}
+                getCalendarTasks = {getCalendarTasks}
             />
         </div>
     </div>
