@@ -47,3 +47,10 @@ export const projectDetailsToggleData = [
     {id:1, title:'List View'},
     {id:2, title:'WorkFlow View'}
 ]
+
+
+export const priorityCustomData = [
+    {id:1, title:'Low', value:"0"},
+    {id:2, title:"Medium", value:"1"},
+    {id:3, title:"High", value:"2"}
+]

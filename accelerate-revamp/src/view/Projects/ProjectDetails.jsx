@@ -9,14 +9,19 @@ import { FaPlus, FaSort } from 'react-icons/fa6'
 import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import { MdFilterAlt } from 'react-icons/md'
 import ProjectTable from './ProjectTable'
+import useMilestoneServices from '../../viewModel/milestoneViewModel/milestoneServices'
 
 const ProjectDetails = () => {
 
-    const {gettingProjectTasks, projectTasksData} = useProjectDetailsServices()
+    const {gettingProjectTasks, projectTasksData, editProjectHandler, editProjectTaskValue,
+        handleChangeEditTask ,handleSelectEditTask
+
+    } = useProjectDetailsServices()
     const projectInfo = projectTasksData?.data?.project_info
     const tasksData = projectTasksData?.data?.project_tasks
 
-    // console.log('tasksData', tasksData)
+    
+    const {handleSinglTaskMileStone} = useMilestoneServices()
 
     const params = useParams()
     useEffect(()=>{
@@ -143,9 +148,14 @@ const ProjectDetails = () => {
                     </Menu>
                 </div>
             </div>
-            <div>
+            <div className='px-2'>
                 <ProjectTable 
                     tasksData = {tasksData}
+                    editProjectHandler ={editProjectHandler}
+                    editProjectTaskValue ={editProjectTaskValue}
+                    handleChangeEditTask ={handleChangeEditTask}
+                    handleSelectEditTask ={handleSelectEditTask}
+                    handleSinglTaskMileStone ={handleSinglTaskMileStone}
                 />
             </div>
             

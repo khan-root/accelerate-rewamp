@@ -33,7 +33,8 @@ module.exports = withMT({
         customGray:{
           100:'#f8f9fa',
           200:'#f8f9fe',
-          300:'#979797'
+          300:'#979797',
+          400:'#00000020'
         },
         customGreen:{
           100:'#28a745',

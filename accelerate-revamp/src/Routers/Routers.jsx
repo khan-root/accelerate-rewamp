@@ -5,6 +5,7 @@ import Teams from '../view/Teams/Teams'
 import WorkFlows from '../view/WorkFlows/WorkFlows'
 import Projects from '../view/Projects/Projects'
 import ProjectDetails from '../view/Projects/ProjectDetails'
+import Mileston from '../view/Milestone/Mileston'
 
 const Routers = () => {
   return (
@@ -15,6 +16,7 @@ const Routers = () => {
       <Route exact path='/projects' element={<Projects />}>
         <Route path='details/:id' element={<ProjectDetails />} />
       </Route>
+      <Route path='/task/:id' element={<Mileston />} />
     </Routes>
   )
 }
