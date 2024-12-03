@@ -29,3 +29,34 @@ export const calculateDaysLeft = (closingDate) => {
 export const getRandomHexColor =()=> {
   return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
 }
+
+
+
+export const formatDeadlineDifference = (deadlineDate) => {
+    if (!deadlineDate) {
+        return "Invalid deadline date";
+    }
+
+    const currentDate = Math.floor(Date.now() / 1000); // Current date in Unix time (seconds)
+    const differenceInSeconds = Math.abs(deadlineDate - currentDate); // Always get the absolute difference
+    const differenceInDays = Math.floor(differenceInSeconds / (60 * 60 * 24));
+
+    const years = Math.floor(differenceInDays / 365);
+    const remainingDaysAfterYears = differenceInDays % 365;
+    const months = Math.floor(remainingDaysAfterYears / 30);
+    const days = remainingDaysAfterYears % 30;
+
+    // Create a formatted string
+    let result = [];
+    if (years > 0) {
+        result.push(`${years} year${years > 1 ? "s" : ""}`);
+    }
+    if (months > 0) {
+        result.push(`${months} month${months > 1 ? "s" : ""}`);
+    }
+    if (days > 0) {
+        result.push(`${days} day${days > 1 ? "s" : ""}`);
+    }
+
+    return result.join(" ") || "Less than a day";
+};

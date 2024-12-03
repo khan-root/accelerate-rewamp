@@ -11,6 +11,8 @@ const debounce = (func, delay) => {
 const projectsServices = (set, get)=>({
 
     projects:[],
+    // projectDetailsData:[],
+
 
     fetchProjects :async(apiData)=>{
         try {
@@ -28,6 +30,9 @@ const projectsServices = (set, get)=>({
         const fetchProjects = get().fetchProjects;
         await fetchProjects(apiData);
     }, 500),
+
+
+
 
 })
 

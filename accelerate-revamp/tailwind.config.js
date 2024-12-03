@@ -33,6 +33,17 @@ module.exports = withMT({
         customGray:{
           100:'#f8f9fa',
           200:'#f8f9fe',
+          300:'#979797'
+        },
+        customGreen:{
+          100:'#28a745',
+          200:"#a4cf30"
+        },
+        customOrange:{
+          100:'#fd9a00'
+        },
+        customRed:{
+          100:'#e8384f'
         }
       },
       boxShadow: {

@@ -12,7 +12,6 @@ const ViewTeam = (props) => {
     const teamInfo = viewTeamValue?.teamInfo
     const members = viewTeamValue?.data?.accepted
     const pending = viewTeamValue?.data?.pending
-    console.log('members', members)
     const oneid = "10395472"
     const {tabToggleState, currentState} = useTabToggle()
   return (

@@ -10,6 +10,8 @@ import { FaPlus } from 'react-icons/fa6'
 import useAddProjectServices from '../../viewModel/projectsViewModel/addProjectServices'
 import CustomDrawer from '../../components/CustomDrawer'
 import AddProject from './AddProject'
+import useProjectDetailsServices from '../../viewModel/projectsViewModel/projectDetailsServices'
+import { Outlet, useParams } from 'react-router-dom'
 
 const Projects = () => {
   const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
@@ -21,9 +23,19 @@ const Projects = () => {
     handleAddNewProject
    } = useAddProjectServices()
 
+   const {projectDetails} = useProjectDetailsServices()
+
+   const params = useParams()
+
   const projectsData = projects?.projects_details
   return (
     <>
+    {params?.id ? <Outlet 
+      
+
+    /> : 
+    
+      <>
       <div className='px-10 py-5 space-y-6 '>
         <div className='text-[20px] text-customBlack-300'>
           <span>Projects</span>
@@ -69,11 +81,11 @@ const Projects = () => {
           <div className='col-span-6'>right</div>
         </div>
         <div className='flex gap-4 items-center'>
-          <div class="w-full max-w-sm min-w-[200px]">
-            <div class="relative flex items-center">
+          <div className="w-full max-w-sm min-w-[200px]">
+            <div className="relative flex items-center">
               <span className="absolute w-5 h-5 top-2.5 left-2.5 text-customBlue-500"><CgSearch /></span>        
               <input
-                class="w-full bg-transparent placeholder:text-customBlack-400 text-customBlack-700 text-sm border-b border-b-customBlack-300  pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-b-customBlack-400 hover:border-b-customBlack-300  focus:shadow-bottom"
+                className="w-full bg-transparent placeholder:text-customBlack-400 text-customBlack-700 text-sm border-b border-b-customBlack-300  pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-b-customBlack-400 hover:border-b-customBlack-300  focus:shadow-bottom"
                 placeholder="Search" 
                 onChange={handleChangeSerachProjects}
                 name='serach'
@@ -106,25 +118,27 @@ const Projects = () => {
           </div>
 
         </div>
-          <div className='grid grid-cols-6 gap-6'>
-            
+        <div className='grid grid-cols-6 gap-6'>
+          
 
 
-              {(projectState.state === "active" || projectState.state === "all_projects" || projectState.state === "my_projects") &&
-                <div className='border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'
-                  onClick={handleAddProject}
-                >
-                  <span className='text-[25px]'><FaPlus /></span>
-                </div>
-              }
-              {projectsData?.data?.map((ele)=>(
-                <ProjectsList 
-                  key={ele?.id}
-                  ele = {ele}
-                />
-              ))}
-          </div>
+            {(projectState.state === "active" || projectState.state === "all_projects" || projectState.state === "my_projects") &&
+              <div className='border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'
+                onClick={handleAddProject}
+              >
+                <span className='text-[25px]'><FaPlus /></span>
+              </div>
+            }
+            {projectsData?.data?.map((ele)=>(
+              <ProjectsList 
+                key={ele?.id}
+                ele = {ele}
+                projectDetails= {projectDetails}
+              />
+            ))}
+        </div>
       </div>
+        
       {addProjectValue.show &&
         <CustomDrawer 
           open = {addProjectValue.show}
@@ -153,6 +167,10 @@ const Projects = () => {
           widthSize = {1150}
         />
       }
+      </>
+      }
+
+      
     </>
   )
 }

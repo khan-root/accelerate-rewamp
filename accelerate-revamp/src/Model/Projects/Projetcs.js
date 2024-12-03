@@ -51,7 +51,18 @@ const projectsApi = {
                 ...data
             }
         })
-    }
+    },
+    projectTasks:function(data){
+       return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'project_tasks',
+                ...data
+            }
+        })
+    },
+    
 }
 
 

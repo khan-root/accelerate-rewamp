@@ -41,3 +41,9 @@ export const projectActonList = [
     {id:1, title:'Edit Team', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
     {id:2, title:'Delete Team', icon:<HiMiniTrash />, color:'text-red-600'}
 ]
+
+
+export const projectDetailsToggleData = [
+    {id:1, title:'List View'},
+    {id:2, title:'WorkFlow View'}
+]
