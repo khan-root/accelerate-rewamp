@@ -12,7 +12,7 @@ const ViewTeam = (props) => {
     const teamInfo = viewTeamValue?.teamInfo
     const members = viewTeamValue?.data?.accepted
     const pending = viewTeamValue?.data?.pending
-    const oneid = "10395472"
+    const oneid = "10268458"
     const {tabToggleState, currentState} = useTabToggle()
   return (
     <div className='space-y-6'>
