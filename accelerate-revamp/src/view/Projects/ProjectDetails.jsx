@@ -10,6 +10,9 @@ import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tai
 import { MdFilterAlt } from 'react-icons/md'
 import ProjectTable from './ProjectTable'
 import useMilestoneServices from '../../viewModel/milestoneViewModel/milestoneServices'
+import useAddTaskServices from '../../viewModel/projectsViewModel/AddTaskServices'
+import CustomDrawer from '../../components/CustomDrawer'
+import AddTask from './AddTask'
 
 const ProjectDetails = () => {
 
@@ -31,7 +34,10 @@ const ProjectDetails = () => {
 
     const {tabToggleState, currentState} = useTabToggle()
 
+    const {addTaskHandle,addTaskValue,handleChangeAddTask} = useAddTaskServices()
+
   return (
+    <>
     <div className='ps-5 pt-10 grid grid-cols-12'>
         <div className='col-span-3 shadow-lg rounded-[14px] h-[450px]'>
             <div className="">
@@ -94,6 +100,8 @@ const ProjectDetails = () => {
                     <CustomButton 
                         icon={<FaPlus />}
                         title="Add Task"
+                        onClick={addTaskHandle}
+
 
                     />
                 </div>
@@ -162,6 +170,24 @@ const ProjectDetails = () => {
             
         </div>
     </div>
+
+    {addTaskValue?.show && 
+        <CustomDrawer 
+            open={addTaskValue.show}
+            compo={
+                <AddTask 
+                    addTaskValue = {addTaskValue}
+                    handleChangeAddTask = {handleChangeAddTask}
+
+                />
+            }
+            title="Create Task"
+            closeDrawer={addTaskHandle}
+            widthSize={1150}
+        
+        />
+    }
+    </>
   )
 }
 

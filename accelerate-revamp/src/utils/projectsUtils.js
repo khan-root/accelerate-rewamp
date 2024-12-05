@@ -54,3 +54,12 @@ export const priorityCustomData = [
     {id:2, title:"Medium", value:"1"},
     {id:3, title:"High", value:"2"}
 ]
+export const taskPrioriyCustomData = [
+    {id:1, title:'Low', value:"0"},
+    {id:2, title:"Normal", value:"1"},
+    {id:3, title:"High", value:"2"}
+]
+export const taskTypeCustomData = [
+    {id:1, title:'Indoor', value:"0"},
+    {id:2, title:'Field', value:""},
+]
