@@ -6,7 +6,7 @@ import { IoClose } from "react-icons/io5";
 const CustomDialog = (props) => {
   const { openDialog , handleOpen, title, compo, size, outsidePress=true} = props
   return (
-    <Dialog open={openDialog} handler={handleOpen} size={size} dismiss={{ outsidePress: outsidePress }}>
+    <Dialog open={openDialog} handler={handleOpen} size={size} dismiss={{ outsidePress: outsidePress }} className='relative z-[50]'>
         <DialogHeader className='justify-between'>
           <div className='flex flex-1 items-center justify-center'>
           {title}

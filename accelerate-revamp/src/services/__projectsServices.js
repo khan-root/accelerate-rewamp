@@ -1,3 +1,5 @@
+import projectsApi from "../Model/Projects/Projetcs";
+
 export const calculateDaysLeft = (closingDate) => {
   if (!closingDate || closingDate === "0") {
     return 'continue'; // Default value if closingDate is not provided
@@ -60,3 +62,25 @@ export const formatDeadlineDifference = (deadlineDate) => {
 
     return result.join(" ") || "Less than a day";
 };
+
+
+
+
+export const addProjectTaskDetails = async(data)=>{
+  try {
+    const response = await projectsApi.addProjectTaskDetails(data)
+    return response
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+
+export const addProjectTeamEmp = async(data)=>{
+  try{
+    const response = await projectsApi.getTeamMemebers(data)
+    return response
+  }catch(err){
+    console.log(err)
+  }
+}

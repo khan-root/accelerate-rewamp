@@ -34,7 +34,11 @@ const ProjectDetails = () => {
 
     const {tabToggleState, currentState} = useTabToggle()
 
-    const {addTaskHandle,addTaskValue,handleChangeAddTask} = useAddTaskServices()
+    const {addTaskHandle,addTaskValue,handleChangeAddTask,addMoreMileStone, removeMilestone,
+        handleToggleSelectEmp,handleSelectAddTask,removeFromSelectedList,addToSelectedEmpList,
+        removeFromTeamMemberSelect,handleMultipleMSChange,handleDragEnd
+
+    } = useAddTaskServices(params.id)
 
   return (
     <>
@@ -178,15 +182,25 @@ const ProjectDetails = () => {
                 <AddTask 
                     addTaskValue = {addTaskValue}
                     handleChangeAddTask = {handleChangeAddTask}
+                    addMoreMileStone = {addMoreMileStone}
+                    removeMilestone = {removeMilestone}
+                    handleToggleSelectEmp = {handleToggleSelectEmp}
+                    handleSelectAddTask = {handleSelectAddTask}
+                    removeFromSelectedList = {removeFromSelectedList}
+                    addToSelectedEmpList = {addToSelectedEmpList}
+                    removeFromTeamMemberSelect = {removeFromTeamMemberSelect}
+                    handleMultipleMSChange = {handleMultipleMSChange}
+                    handleDragEnd = {handleDragEnd}
 
                 />
             }
             title="Create Task"
             closeDrawer={addTaskHandle}
-            widthSize={1150}
+            widthSize={1300}
         
         />
     }
+    
     </>
   )
 }

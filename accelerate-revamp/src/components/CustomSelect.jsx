@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 
 const CustomSelect = (props) => {
-  const { value, placeHolderTitle, onChangeHandler, cStyle, options, onHandleSelectSearch, searching=false, disabled=false } = props
+  const { value, placeHolderTitle, onChangeHandler, cStyle, options, onHandleSelectSearch, searching=false, disabled=false, isMulti = false, } = props
   // const { customStyles } = useEmployees()
 
   const customStyles = {
@@ -74,6 +74,7 @@ const CustomSelect = (props) => {
         onInputChange={onHandleSelectSearch} 
         styles={styles}
         isDisabled={disabled}
+        isMulti={isMulti}
 
       />
     </div>

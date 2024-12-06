@@ -62,6 +62,26 @@ const projectsApi = {
             }
         })
     },
+    addProjectTaskDetails:function(data){
+       return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_task_details',
+                ...data
+            }
+        })
+    },
+    getTeamMemebers:function(data){
+       return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_team_member_dropdown',
+                ...data
+            }
+        })
+    },
     
 }
 
