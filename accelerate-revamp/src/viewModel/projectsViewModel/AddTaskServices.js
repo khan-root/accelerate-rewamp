@@ -1,9 +1,19 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { addProjectTaskDetails, addProjectTeamEmp } from "../../services/__projectsServices"
 import { showToast } from "../../components/Toaster/Toaster"
-import { object } from "framer-motion/client";
+import {  GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { fileHitting } from "../../services/__elephantServices";
+import taskApi from "../../Model/Task/Task";
+import useStore from "../../Store/Store";
 
+const LIBRARIES = ['places'];
 const useAddTaskServices = (projectID)=>{
+
+
+
+    const settingNewTask = useStore((state)=> state.settingNewTask)
+
+
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -16,6 +26,7 @@ const useAddTaskServices = (projectID)=>{
         taskPriority:'1',
         startDate:today,
         endDate:'',
+        file:'',
         quickEmpSelectionList:[],
         wtbdList:[
             {id:1, description:'', selectionList:[] , mPriority:'0', uploadFile:'', date:'', selectEmp:null},
@@ -32,24 +43,73 @@ const useAddTaskServices = (projectID)=>{
         accountable:[],
         consultant:[],
         informed:[],
+        personName:'',
+        personContact:'',
+        meetingDate:'',
+        meetingPlace:'',
+        lon:'',
+        lat:'',
+        phaseId:'',
+        loading:false,
 
     })
 
 
-    const addTaskHandle = async()=>{
+    const mapRef = useRef();
+    const autocompleteService = useRef(null); // Create a reference for AutocompleteService
+    const placesServiceRef = useRef(null);
+
+
+    
+
+
+    const addTaskHandle = async(phaseId)=>{
         if(addTaskValue.show){
             setAddTaskValue((prevState)=>({
                 ...prevState,
-                show:false
+                show:false,
+                taskType:"0",
+                taskTitle:'',
+                taskDescription:'',
+                taskPriority:'1',
+                startDate:today,
+                endDate:'',
+                file:'',
+                quickEmpSelectionList:[],
+                wtbdList:[
+                    {id:1, description:'', selectionList:[] , mPriority:'0', uploadFile:'', date:'', selectEmp:null},
+                ],
+                selectEmpModal:false,
+                empList:[],
+                empId:null,
+                allSelectedEmp:[],
+                allTeams:[],
+                teamId:null,
+                teamEmployees:[],
+                teamEmployeeId:null,
+                responsible:[],
+                accountable:[],
+                consultant:[],
+                informed:[],
+                personName:'',
+                personContact:'',
+                meetingDate:'',
+                meetingPlace:'',
+                lon:'',
+                lat:'',
+                phaseId:''
+
             }))
         }
         else{ 
+            console.log('phaseId', phaseId)
             const apiData = {
                 project_id : projectID
             }
             setAddTaskValue((prevState)=>({
                 ...prevState,
-                show:true
+                show:true,
+                phaseId:phaseId
             }))
             const taskDetails = await addProjectTaskDetails(apiData)
             const responseData = taskDetails.data
@@ -67,14 +127,34 @@ const useAddTaskServices = (projectID)=>{
         }
     }
 
+    // if(fieldName === "uploadFile"){
+    //         const fileResult = await fileHitting(value);
 
-    const handleChangeAddTask = (e)=>{
-        const {name, value} = e.target 
+    //         setAddMilestoneValue((prev) => ({
+    //             ...prev,
+    //             milestone: prev.milestone.map((item) =>
+    //                 item.id === id ? { ...item, [fieldName]: fileResult?.FILE_PATH } : item
+    //             ),
+    //         }));
+    //     }
 
-        setAddTaskValue((prevState)=>({
-            ...prevState,
-            [name]: value
-        }))
+
+    const handleChangeAddTask = async(e)=>{
+        const {name, value, files} = e.target 
+
+        if(files){
+            const fileResult = await fileHitting(files[0]);
+            setAddTaskValue((prevState)=>({
+                ...prevState,
+                [name]: fileResult?.FILE_PATH
+            }))
+        }else{
+            setAddTaskValue((prevState)=>({
+                ...prevState,
+                [name]: value
+            }))
+
+        }
     }
 
 
@@ -215,18 +295,23 @@ const useAddTaskServices = (projectID)=>{
 
 
     const removeFromSelectedList = (id)=>{
-        setAddTaskValue((prevState)=>({
-            ...prevState,
-            allSelectedEmp: prevState.allSelectedEmp?.filter((ele)=> ele.id !== id),
-            wtbdList: prevState.wtbdList.map((wtbd) => ({
+        setAddTaskValue((prevState) => {
+            const updatedState = { ...prevState };
+
+            // Dynamically iterate over target arrays
+            ["responsible", "accountable", "consultant", "informed"].forEach((key) => {
+                updatedState[key] = prevState[key].filter((emp) => emp.id !== id);
+            });
+
+            // Existing logic for allSelectedEmp and wtbdList
+            updatedState.allSelectedEmp = prevState.allSelectedEmp?.filter((ele) => ele.id !== id);
+            updatedState.wtbdList = prevState.wtbdList.map((wtbd) => ({
                 ...wtbd,
                 selectionList: wtbd.selectionList.filter((emp) => emp.id !== id),
-            })),
-            responsible: prevState.responsible?.filter((emp) => emp.id !== id),
-            accountable: prevState.accountable?.filter((emp) => emp.id !== id),
-            consultant: prevState.consultant?.filter((emp) => emp.id !== id),
-            informed: prevState.informed?.filter((emp) => emp.id !== id),
-        }))
+            }));
+
+            return updatedState;
+        });
         showToast('Employee Removed from Selected List', 'success')
     }
     const removeFromTeamMemberSelect = (id,category)=>{
@@ -246,17 +331,36 @@ const useAddTaskServices = (projectID)=>{
 
 
 
-    const handleMultipleMSChange = (value, id, fieldName)=>{
-        
-        setAddTaskValue((prev) => ({
-            ...prev,
-            wtbdList: prev.wtbdList.map((item) =>
-                item.id === id ? { ...item, [fieldName]: value } : item
-            ),
-        }));
+    const handleMultipleMSChange = async(value, id, fieldName)=>{
+
+        if(fieldName === "uploadFile"){
+            const fileResult = await fileHitting(value);
+
+            console.log('fileResult', fileResult)
+
+            setAddTaskValue((prev) => ({
+                ...prev,
+                wtbdList: prev.wtbdList.map((item) =>
+                    item.id === id ? { ...item, [fieldName]: fileResult?.FILE_PATH } : item
+                ),
+            }));
+        }else{
+            setAddTaskValue((prev) => ({
+                ...prev,
+                wtbdList: prev.wtbdList.map((item) =>
+                    item.id === id ? { ...item, [fieldName]: value } : item
+                ),
+            }));
+        }
 
     }
 
+    const [center, setCenter] = useState({
+        lat: 34.0028888889,
+        lng: 71.4998333333,
+    });
+    const [places, setPlaces] = useState([]); // State to hold the places list
+    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
 
 
     const handleDragEnd = (result) => {
@@ -284,10 +388,215 @@ const useAddTaskServices = (projectID)=>{
     };
 
 
+    const onSelectPlace = (place) => {
+        if (place.place_id) {
+            // Use PlacesService to get more details about the selected place
+            placesServiceRef.current.getDetails(
+                { placeId: place.place_id },
+                (details, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && details.geometry) {
+                    const location = details.geometry.location;
+                    const newCenter = {
+                    lat: location.lat(),
+                    lng: location.lng(),
+                    };
+                    setCenter(newCenter); // Update the map center to the selected place
+                    mapRef.current.panTo(newCenter); // Pan the map smoothly
+                    setSearchQuery(place.description); // Update the input with the selected place
+                    setPlaces([]); // Clear suggestions
+                } else {
+                    console.error('Error fetching place details:', status);
+                }
+                }
+            );
+        }
+    }
+
+
+    const onSearchChange = (e) => {
+        const query = e.target.value;
+       setSearchQuery(query);
+     
+       // Check if the input is a valid latitude/longitude
+       const latLngRegex = /^[-+]?\d{1,2}(\.\d+)?[,]?\s*[-+]?\d{1,3}(\.\d+)?$/;
+       
+       if (latLngRegex.test(query)) {
+         // If it's a valid Lat/Lng, parse and center the map on it
+         const [lat, lng] = query.split(',').map(coord => parseFloat(coord.trim()));
+         const latLng = new window.google.maps.LatLng(lat, lng);
+         setCenter({ lat, lng });
+         mapRef.current.panTo(latLng); // Optionally pan to the coordinates
+         
+         // Clear places since it's not a name-based search
+         setPlaces([]);
+       } else if (query) {
+         // If it's a name-based search, fetch place predictions
+         autocompleteService?.current.getPlacePredictions(
+           {
+             input: query,
+             // Optionally, you can add additional parameters like location or radius
+           },
+           (predictions, status) => {
+             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+               setPlaces(predictions);
+             } else {
+               console.error("Error fetching places:", status);
+             }
+           }
+         );
+       } else {
+         // Clear the places if the input is empty
+         setPlaces([]);
+       }
+       };
+
+
+       const onLoadMap = (map) => {
+            mapRef.current = map;
+        };
+
+
+        const onMapClick = (event) => {
+            const newCenter = {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng()
+            };
+            setCenter(newCenter);
+            const geocoder = new window.google.maps.Geocoder();
+
+            geocoder.geocode({ location: newCenter }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    const fullAddress = results[0].formatted_address;
+                    const filteredAddress = fullAddress
+                    .split(',')
+                    .slice(1) // Skip the first part (e.g., "2F2X+WRF")
+                    .join(',') // Rejoin the remaining parts
+                    .trim();
+    
+                    setAddTaskValue((prevState)=>({
+                        ...prevState,
+                        meetingPlace: filteredAddress
+                    }))  // Optionally save to state
+                } else {
+                    console.error('Geocoder failed due to:', status);
+                }
+            });
+        };
+
+
+        const { isLoaded, loadError } = useJsApiLoader({
+          googleMapsApiKey: 'AIzaSyDQ5csDpZbI4g7G5YX07OtXzX5gQ_R6vj0',
+          libraries: LIBRARIES,
+      });
+        useEffect(() => {
+            if (isLoaded) {
+              // Initialize services after the map has loaded
+              if (mapRef.current) {
+                autocompleteService.current = new window.google.maps.places.AutocompleteService();
+                placesServiceRef.current = new window.google.maps.places.PlacesService(mapRef.current);
+              }
+            }
+          }, [isLoaded]);
+    
+
+    const generateTaskMembersRole = (taskValue) => {
+        const taskMembersRole = [];
+
+        Object.keys(taskValue).forEach((role) => {
+            const members = taskValue[role]; // Get members for the current role
+            if (members && members.length > 0) {
+                members.forEach((member) => {
+                    taskMembersRole.push({ id: member.id, role }); // Use the `id` property
+                });
+            }
+        });
+
+        return taskMembersRole;
+    };
+
+
+    const handleSubmitTask = async(e)=>{
+        e.preventDefault()
+
+        
+
+
+
+        const {
+            taskTitle,taskDescription,taskPriority,
+            startDate, endDate, file,
+            taskType,wtbdList,responsible,accountable,consultant,informed,
+            personName,personContact, meetingDate,meetingPlace,
+            phaseId
+        } = addTaskValue
+
+        const apiData = {
+            project_id: projectID,
+            title:taskTitle,
+            description:taskDescription,
+            priority:taskPriority,
+            start_date: startDate,
+            closing_date:endDate ==='' ? 0 : endDate ,
+            task_file_data:file,
+            task_type:taskType === "0" ? "0" : "1",
+            milestone:taskType === "0" ? wtbdList.map((ele)=> ele?.description) : [],
+            assigned_to:taskType === "0" ? wtbdList.map((ele)=> ele?.selectEmp?.value ? ele?.selectEmp?.value : '') : [],
+            milestone_priority:taskType === "0" ? wtbdList.map((ele)=> ele?.mPriority) : [],
+            milestone_file: taskType === "0" ?  wtbdList.map((ele)=> ele?.uploadFile) : [],
+            milestone_deadline: taskType === "0" ? wtbdList.map((ele)=> ele?.date) : [],
+            task_members_role:generateTaskMembersRole({responsible,accountable,consultant,informed}),
+            phase_id:phaseId,
+            person_name: taskType === "0" ? '' : personName,
+            person_contact:taskType === "0" ? '' : personContact,
+            meeting_date:taskType === "0" ? '' : meetingDate,
+            meeting_place:taskType === "0" ? '' : meetingPlace,
+            lon: taskType === "0" ? '' : center.lng,
+            lat:taskType === "0" ? '' : center.lat
+
+
+
+        }
+
+        
+                
+        setAddTaskValue((prevState)=>({
+            ...prevState,
+            loading:true
+        }))
+
+        try {
+            
+            const response = await taskApi.taskCreate(apiData)
+            const responseData = response.data 
+            console.log('response', response)
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const newData = responseData.INSERTED_DATA
+                    settingNewTask(newData,phaseId)
+                    showToast("Task Created successfully", 'success')
+                addTaskHandle()
+
+            }else{
+                const error = responseData.ERROR_DESCRIPTION
+                showToast(error, 'error')
+            }
+        } catch (error) {
+            
+        }finally{
+            setAddTaskValue((prevState)=>({
+                ...prevState,
+                loading:false
+            }))
+        }
+    }
+
 
     return {addTaskHandle,addTaskValue, handleChangeAddTask,addMoreMileStone,removeMilestone,handleToggleSelectEmp,handleSelectAddTask,removeFromSelectedList, addToSelectedEmpList,
         removeFromTeamMemberSelect,handleMultipleMSChange,
-        handleDragEnd
+        handleDragEnd,
+        mapRef,autocompleteService,placesServiceRef,center,places,searchQuery,onLoadMap,
+        onSearchChange,onSelectPlace,onMapClick,
+        isLoaded,
+        handleSubmitTask
     }
 
 }

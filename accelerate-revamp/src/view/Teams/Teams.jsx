@@ -27,7 +27,7 @@ const Teams = () => {
   },[])
 
 
-  const {createTeamValue, toggleAddTeam, handleChangeTeam,handleBulkEmail, handleRemoveEmail} = useCreateTeamServices()
+  const {createTeamValue, toggleAddTeam, handleChangeTeam,handleBulkEmail, handleRemoveEmail,handleAddTeam} = useCreateTeamServices()
 
   
 
@@ -73,6 +73,7 @@ const Teams = () => {
               createTeamValue ={createTeamValue}
               handleBulkEmail ={handleBulkEmail}
               handleRemoveEmail ={handleRemoveEmail}
+              handleAddTeam ={handleAddTeam}
             />
           }
           title="Create Team"

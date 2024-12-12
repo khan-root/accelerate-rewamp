@@ -7,6 +7,7 @@ import useMouseHoverService from '../../services/__mouseHoverService'
 import { Button, Card, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import Wheel from '@uiw/react-color-wheel';
 import { projectActonList } from '../../utils/projectsUtils'
+import { teamActonList } from '../../utils/teamUtils'
 
 
 const TeamsList = (props) => {
@@ -76,7 +77,7 @@ const TeamsList = (props) => {
                             
                                 </Card>
                                 <ul className="col-span-4 flex w-full flex-col gap-2" onClick={(e)=>e.stopPropagation()}>
-                                    {projectActonList.map(({ title, icon, id, color }) => (
+                                    {teamActonList.map(({ title, icon, id, color }) => (
                                         <MenuItem key={id}>
                                         
                                     

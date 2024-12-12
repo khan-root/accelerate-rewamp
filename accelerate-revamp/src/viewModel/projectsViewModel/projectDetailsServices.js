@@ -2,13 +2,17 @@ import { useNavigate } from "react-router-dom"
 import projectsApi from "../../Model/Projects/Projetcs"
 import { useState } from "react"
 import { formatUnixToHTMLDateTime, formatUnixToYMD } from "../../services/__dateTimeServices"
+import useStore from "../../Store/Store"
 
 const useProjectDetailsServices = ()=>{
 
-    const [projectTasksData, setProjectTasksData] = useState({
-        data:{},
-        accordian:[]
-    })
+    // const [projectTasksData, setProjectTasksData] = useState({
+    //     data:{},
+    //     accordian:[]
+    // })
+
+    const gettingProjectTasks = useStore((state)=> state.gettingProjectTasks)
+    const projectTasksData = useStore((state)=> state.projectTasksData)
 
     const navigate = useNavigate()
 
@@ -18,27 +22,27 @@ const useProjectDetailsServices = ()=>{
     }
 
 
-    const gettingProjectTasks = async(id)=>{
+    // const gettingProjectTasks = async(id)=>{
 
-        const apiData = {
-            project_id: id
-        }
+    //     const apiData = {
+    //         project_id: id
+    //     }
 
-        try {
-            const response = await projectsApi.projectTasks(apiData)
-            const responseData = response.data 
-            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
-                console.log('response', response)
-                const dbData = responseData.DB_DATA 
-                setProjectTasksData((prevState)=>({
-                    ...prevState,
-                    data:dbData
-                }))
-            }
-        } catch (error) {
+    //     try {
+    //         const response = await projectsApi.projectTasks(apiData)
+    //         const responseData = response.data 
+    //         if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+    //             console.log('response', response)
+    //             const dbData = responseData.DB_DATA 
+    //             setProjectTasksData((prevState)=>({
+    //                 ...prevState,
+    //                 data:dbData
+    //             }))
+    //         }
+    //     } catch (error) {
             
-        }
-    }
+    //     }
+    // }
 
 
     const [editProjectTaskValue, setEditProjectTaskValue] = useState({
@@ -94,6 +98,10 @@ const useProjectDetailsServices = ()=>{
             [field]: selected
         }))
     }
+
+
+
+
 
 
     return {projectDetails,projectTasksData, gettingProjectTasks,editProjectHandler, editProjectTaskValue,

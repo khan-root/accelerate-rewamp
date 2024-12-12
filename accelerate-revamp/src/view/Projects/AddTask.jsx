@@ -9,15 +9,19 @@ import {  GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import SelectEmpTask from './SelectEmpTask'
 import CustomDialog from '../../components/CustomDialog'
 import DragAndDropEmp from './DragAndDropEmp'
-const LIBRARIES = ['places'];
+import CustomButton from '../../components/CustomButton'
+
 const AddTask = (props) => {
     const  { handleChangeAddTask, addTaskValue, addMoreMileStone,removeMilestone,handleToggleSelectEmp,handleSelectAddTask,removeFromSelectedList,addToSelectedEmpList,removeFromTeamMemberSelect,handleMultipleMSChange,
-      handleDragEnd
+      handleDragEnd,
+      mapRef,autocompleteService,placesServiceRef,center,places,searchQuery,onLoadMap,
+      onSearchChange,onSelectPlace,onMapClick,
+      isLoaded,handleSubmitTask
     } = props
 
   return (
     <>
-    <form className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4'>
+    <form className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4' onSubmit={handleSubmitTask}>
         <div className='space-y-5'>
             <div>
                 <span className='text-customBlue-100 text-[16px]'>Task Info</span>
@@ -27,9 +31,9 @@ const AddTask = (props) => {
               <input 
                   className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                   type='text' 
-                //   value={addProjectValue.name}
+                  value={addTaskValue?.taskTitle}
                   name='taskTitle' 
-                //   onChange={handleChangeAddProject}
+                  onChange={handleChangeAddTask}
                   placeholder='Task Title'
               />
             </div>
@@ -38,9 +42,9 @@ const AddTask = (props) => {
               <input 
                   className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                   type='text' 
-                //   value={addProjectValue.name}
+                  value={addTaskValue?.taskDescription}
                   name='taskDescription' 
-                //   onChange={handleChangeAddProject}
+                  onChange={handleChangeAddTask}
                   placeholder='Description'
               />
             </div>
@@ -59,8 +63,8 @@ const AddTask = (props) => {
                     }
                     value={ ele.value }
                     name='taskPriority'
-                    //   onChange={handleChangeAddProject}
-                      checked={addTaskValue.taskPriority == ele.id}
+                      onChange={handleChangeAddTask}
+                      checked={addTaskValue?.taskPriority === ele.value}
                     />
                 ))}
                 </div>
@@ -71,9 +75,9 @@ const AddTask = (props) => {
                 <input 
                     className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                     type='date' 
-                      value={addTaskValue.startDate}
+                      value={addTaskValue?.startDate}
                       name='startDate' 
-                    //   onChange={handleChangeAddProject}
+                      onChange={handleChangeAddTask}
                 />
                 </div>
                 <div className='space-y-1'>
@@ -81,9 +85,9 @@ const AddTask = (props) => {
                 <input 
                     className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                     type='datetime-local' 
-                    //   value={addProjectValue.name}
-                    //   name='endDate' 
-                    //   onChange={handleChangeAddProject}
+                      value={addTaskValue.endDate}
+                      name='endDate' 
+                      onChange={handleChangeAddTask}
                 />
                 </div>
             </div>
@@ -102,7 +106,7 @@ const AddTask = (props) => {
                 <div className='space-y-1 col-span-4'>
                     <CustomSelect 
                         placeHolderTitle="Team" 
-                        options={addTaskValue?.allTeams?.map((team) => ({ value: team.id, label:team.owner_name}))}
+                        options={addTaskValue?.allTeams?.map((team) => ({ value: team.id, label:team.name}))}
                         onChangeHandler={(selectedOption) => handleSelectAddTask(selectedOption, 'teamId')}
                         value={addTaskValue?.teamId}
                         
@@ -110,7 +114,7 @@ const AddTask = (props) => {
                 </div>
                 <div className='space-y-1 col-span-4'>
                     <CustomSelect 
-                        placeHolderTitle="Memeber" 
+                        placeHolderTitle="Member" 
                         options={addTaskValue?.teamEmployees?.map((employee) => ({ value: employee.oneid, label:employee.full_name}))}
                         onChangeHandler={(selectedOption) => handleSelectAddTask(selectedOption, 'teamEmployeeId')}
                         value={addTaskValue?.employeeId}
@@ -131,12 +135,14 @@ const AddTask = (props) => {
                     <label className="block">
                         
                             <input type="file" className="block w-full text-sm text-slate-500
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-full file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-violet-50 file:text-violet-700
-                            hover:file:bg-violet-100
-                            "/>
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-full file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-violet-50 file:text-violet-700
+                              hover:file:bg-violet-100
+                              "
+                              onChange={handleChangeAddTask}
+                            />
                     </label>
                 </div>
                 <div className='space-y-1'>
@@ -159,6 +165,13 @@ const AddTask = (props) => {
                         />
                     ))}
                     </div>
+                </div>
+                <div>
+                  <CustomButton 
+                    title="Create Task"
+                    type="submit"
+                    loading={addTaskValue.loading}
+                  />
                 </div>
             </div>
             
@@ -277,9 +290,9 @@ const AddTask = (props) => {
                             <input 
                                 className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                                 type='text' 
-                                //   value={addProjectValue.name}
-                                //   name='name' 
-                                //   onChange={handleChangeAddProject}
+                                value={addTaskValue?.personName}
+                                name='personName' 
+                                onChange={handleChangeAddTask}
                                 placeholder='Name'
                             />
                         </div>
@@ -288,9 +301,9 @@ const AddTask = (props) => {
                             <input 
                                 className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                                 type='text' 
-                                //   value={addProjectValue.name}
-                                //   name='name' 
-                                //   onChange={handleChangeAddProject}
+                                value={addTaskValue?.personContact}
+                                name='personContact' 
+                                onChange={handleChangeAddTask}
                                 placeholder='Contact #'
                             />
                         </div>
@@ -299,14 +312,27 @@ const AddTask = (props) => {
                             <input 
                                 className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                                 type='datetime-local' 
-                                //   value={addProjectValue.name}
-                                //   name='name' 
-                                //   onChange={handleChangeAddProject}
+                                value={addTaskValue.meetingDate}
+                                name='meetingDate' 
+                                onChange={handleChangeAddTask}
                             />
                         </div>
                     </div>
                     <div className='h-[300px] w-full'>
-                        <CustomGoogleMap />
+                        <CustomGoogleMap 
+                        
+                          mapRef = {mapRef}
+                          autocompleteService={autocompleteService}
+                          placesServiceRef={placesServiceRef}
+                          center={center}
+                          places={places}
+                          searchQuery={searchQuery}
+                          onLoadMap={onLoadMap}
+                          onSearchChange={onSearchChange}
+                          onSelectPlace={onSelectPlace}
+                          onMapClick={onMapClick}
+                          isLoaded={isLoaded}
+                        />
                     </div>
                 </div>
                 
@@ -338,23 +364,22 @@ const AddTask = (props) => {
 export default AddTask
 
 
-const CustomGoogleMap = ()=> {
-     const mapRef = useRef();
-    const autocompleteRef = useRef();
-    const autocompleteService = useRef(null); // Create a reference for AutocompleteService
-    const placesServiceRef = useRef(null);
+const CustomGoogleMap = (props)=> {
+    const {mapRef,autocompleteService,placesServiceRef,center,places,searchQuery,onLoadMap,
+      onSearchChange,onSelectPlace,onMapClick,isLoaded
+    } = props 
 
-    const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: 'AIzaSyDQ5csDpZbI4g7G5YX07OtXzX5gQ_R6vj0',
-        libraries: LIBRARIES,
-    });
+    
 
-    const [center, setCenter] = useState({
-        lat: 34.0028888889,
-        lng: 71.4998333333,
-    });
-    const [places, setPlaces] = useState([]); // State to hold the places list
-    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+
+
+
+    // const { isLoaded, loadError } = useJsApiLoader({
+    //     googleMapsApiKey: 'AIzaSyDQ5csDpZbI4g7G5YX07OtXzX5gQ_R6vj0',
+    //     libraries: LIBRARIES,
+    // });
+
+
 
     const containerStyle = {
         width: '100%',
@@ -381,88 +406,19 @@ const CustomGoogleMap = ()=> {
     };
 
   // Initialize the AutocompleteService instance
-    useEffect(() => {
-    if (isLoaded) {
-      // Initialize services after the map has loaded
-      if (mapRef.current) {
-        autocompleteService.current = new window.google.maps.places.AutocompleteService();
-        placesServiceRef.current = new window.google.maps.places.PlacesService(mapRef.current);
-      }
-    }
-  }, [isLoaded]);
+  //   useEffect(() => {
+  //   if (isLoaded) {
+  //     // Initialize services after the map has loaded
+  //     if (mapRef.current) {
+  //       autocompleteService.current = new window.google.maps.places.AutocompleteService();
+  //       placesServiceRef.current = new window.google.maps.places.PlacesService(mapRef.current);
+  //     }
+  //   }
+  // }, [isLoaded]);
 
-    const onLoadMap = (map) => {
-        mapRef.current = map;
-    };
 
-  const onSearchChange = (e) => {
-   const query = e.target.value;
-  setSearchQuery(query);
 
-  // Check if the input is a valid latitude/longitude
-  const latLngRegex = /^[-+]?\d{1,2}(\.\d+)?[,]?\s*[-+]?\d{1,3}(\.\d+)?$/;
   
-  if (latLngRegex.test(query)) {
-    // If it's a valid Lat/Lng, parse and center the map on it
-    const [lat, lng] = query.split(',').map(coord => parseFloat(coord.trim()));
-    const latLng = new window.google.maps.LatLng(lat, lng);
-    setCenter({ lat, lng });
-    mapRef.current.panTo(latLng); // Optionally pan to the coordinates
-    
-    // Clear places since it's not a name-based search
-    setPlaces([]);
-  } else if (query) {
-    // If it's a name-based search, fetch place predictions
-    autocompleteService.current.getPlacePredictions(
-      {
-        input: query,
-        // Optionally, you can add additional parameters like location or radius
-      },
-      (predictions, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          setPlaces(predictions);
-        } else {
-          console.error("Error fetching places:", status);
-        }
-      }
-    );
-  } else {
-    // Clear the places if the input is empty
-    setPlaces([]);
-  }
-  };
-
-  const onSelectPlace = (place) => {
-   if (place.place_id) {
-      // Use PlacesService to get more details about the selected place
-      placesServiceRef.current.getDetails(
-        { placeId: place.place_id },
-        (details, status) => {
-          if (status === window.google.maps.places.PlacesServiceStatus.OK && details.geometry) {
-            const location = details.geometry.location;
-            const newCenter = {
-              lat: location.lat(),
-              lng: location.lng(),
-            };
-            setCenter(newCenter); // Update the map center to the selected place
-            mapRef.current.panTo(newCenter); // Pan the map smoothly
-            setSearchQuery(place.description); // Update the input with the selected place
-            setPlaces([]); // Clear suggestions
-          } else {
-            console.error('Error fetching place details:', status);
-          }
-        }
-      );
-    }
-  };
-
-  const onMapClick = (event) => {
-        const newCenter = {
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng()
-        };
-        setCenter(newCenter);
-    };
 
   return (
     isLoaded ? (

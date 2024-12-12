@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseURL } from "./BaseUri";
-const jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvbmVpZCI6IjEwMjY4NDU4Iiwib3JnX29uZWlkIjoiMTUiLCJvcmdfbmFtZSI6IlZlZXZvIFRlY2giLCJmdWxsX3VzZXJuYW1lIjoiU2FybWFkIEZhaXphbiBVbGxhaCIsInVzZXJfZW1haWwiOiJzYXJtYWRmNDlAZ21haWwuY29tIiwiZnVsbF9kcCI6Imh0dHBzOlwvXC9vbmVpZC52ZWV2b3RlY2guY29tXC9kcFwvZmlsZXNcLzRkNTQ0MTc5NGU2YTY3MzA0ZTU0NjczZC1ERUZBVUxULmpwZWciLCJyZWNvcmRfaWQiOiJERUZBVUxUIiwiYWNjZXNzX3Rva2VuIjoiYTg0NTA0NDc3bTM2Njg2MzE2MGFjMGNkYWI3ZWM5NmJhYzRiYjFhNmRlZjc3NWEwMzQ2Y2QyODlmMWQiLCJhdWQiOiJoczZlYXZmMzQyMWhoIiwicm9sZV9pZCI6IkVtcGxveWVlIiwicm9sZV9kYl9pZCI6IjE0Iiwib3RoZXJfcGVybWlzc2lvbnMiOm51bGwsImFsbG93ZWRfYXBwX3Rva2VuIjoiYTBlNjIyY2QzNzc3YjBiZDAyNWE2MmFkNCIsImlhdCI6MTczMzQ2MjgxMSwiZXhwIjoxNzMzNTQ5MjExLCJvcmdfZGF0YSI6eyJfaWQiOjE1LCJ1c2VyX29uZWlkIjo4ODA2MjI0LCJvcmdfbmFtZSI6IlZlZXZvIFRlY2giLCJvcmdfdHlwZSI6MTU4LCJudG5fbm8iOiI3MTIwMTI3Iiwib3JnX2JyZl9pbnRybyI6IlZUIHRoZSBUZWxlY29tIFZBUyAmIERpZ2l0YWwgU2VydmljZXMgQ29tcGFueSIsInVzZXJfY29udGFjdCI6IjAzMDQtMTExODMzMyIsImVtYWlsIjoiaHJAdmVldm90ZWNoLmNvbSIsImFkZHJlc3MiOiJWZWV2byBUZWNoLCBPZmZpY2UjNCwgNHRoIEZsb29yLCBCbG9jay1BLCBKYXdhZCBUb3dlcnMsIFVuaSBSb2FkIiwiY291bnRyeV9pZCI6MTYyLCJjaXR5X2lkIjo4NTkwOSwiY291bnRyeV9jb2RlIjoiUEsifSwib25laWRfcm9sZV9wZXJtaXNzaW9ucyI6bnVsbH0.FknCM-rnYNE9a9uZFCDhK8aMO_wzAuf5K163d9nUxpw"
+import { backLogURL, baseURL } from "./BaseUri";
+const jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvbmVpZCI6IjEwMzk1NDcyIiwib3JnX29uZWlkIjoiMTAzODE5NDciLCJvcmdfbmFtZSI6IkNUTiIsImZ1bGxfdXNlcm5hbWUiOiJBaG1hZCBBbGkiLCJ1c2VyX2VtYWlsIjoienl4QGdtYWlsLmNvbSIsImZ1bGxfZHAiOiJodHRwczpcL1wvb25laWQudmVldm90ZWNoLmNvbVwvZHBcL2ZpbGVzXC80ZDU0NDE3YTRmNTQ1NTMwNGU3YTQ5M2QtREVGQVVMVC5qcGVnIiwicmVjb3JkX2lkIjoiREVGQVVMVCIsImFjY2Vzc190b2tlbiI6ImE4NDkzNjMzM20xNTkxODgwODUyYzYwZWZkYzA3MmY4NjdkNmU1ZDhmMDNlMDExZmMzZTA1ZTFhOGYzIiwiYXVkIjoiaHM2ZWF2ZjM0MjFoaCIsInJvbGVfaWQiOiJFbXBsb3llZSIsInJvbGVfZGJfaWQiOiIxNCIsIm90aGVyX3Blcm1pc3Npb25zIjpudWxsLCJhbGxvd2VkX2FwcF90b2tlbiI6IjczMjEwN2Q0MjU2ZTg5OGQxMjAxYzI5YWYiLCJpYXQiOjE3MzM5ODA4MTAsImV4cCI6MTczNDA2NzIxMCwib3JnX2RhdGEiOnsiX2lkIjoxMDM4MTk0NywidXNlcl9vbmVpZCI6MTAzNzk4NDMsIm9yZ19uYW1lIjoiQ1ROIiwib3JnX3R5cGUiOjE1OCwibnRuX25vIjoiMTIzNDU2NyIsIm9yZ19icmZfaW50cm8iOiIxMjM0NSIsInVzZXJfY29udGFjdCI6IjAzMzM3MDQyMTM3IiwiZW1haWwiOiJoazE3NDE2MjhAZ21haWwuY29tIiwiYWRkcmVzcyI6IjEyMyIsImNvdW50cnlfaWQiOjE2MiwiY2l0eV9pZCI6ODU5MDksImNvdW50cnlfY29kZSI6IlBLIn0sIm9uZWlkX3JvbGVfcGVybWlzc2lvbnMiOm51bGx9.z8X6qGjiNkKNcrSMDipT8yRxvUOgvuYNGgAt3dL5FT4"
 
 export const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -9,3 +9,24 @@ export const axiosInstance = axios.create({
         "Authorization": `Bearer ${jwt}`
     }
 })
+export const axiosInstanceBackLog = axios.create({
+    baseURL: backLogURL,
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwt}`
+    }
+})
+
+
+
+
+export const axiosInstanceFile = axios.create({
+    baseURL: baseURL,
+    headers: {
+        "Content-Type": 'multipart/form-data',
+        "Authorization": `Bearer ${jwt}`
+    }
+})
+
+
+

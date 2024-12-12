@@ -1,15 +1,20 @@
 import { useState } from "react"
 import { validateEmail } from "../../validation/customValidation"
 import { showToast } from "../../components/Toaster/Toaster"
+import teamsApi from "../../Model/Teams/Teams"
+import useStore from "../../Store/Store"
 
 const useCreateTeamServices = ()=>{
+    
+    const addTeam = useStore((state)=> state.addTeam)
 
     const [createTeamValue, setCreateTeamValue] = useState({
         show:false, 
         name:'',
         email:'',
         members:'',
-        emailList:[]
+        emailList:[],
+        loading:false,
 
     })
 
@@ -18,9 +23,10 @@ const useCreateTeamServices = ()=>{
         setCreateTeamValue((prevState)=>({
             ...prevState,
             show:!prevState.show,
-             name:'',
+            name:'',
             email:'',
-            members:''
+            members:'',
+            emailList:[]
         }))
     }
 
@@ -83,7 +89,49 @@ const useCreateTeamServices = ()=>{
 
 
 
-    return { createTeamValue, toggleAddTeam, handleChangeTeam,handleBulkEmail,handleRemoveEmail }
+    const handleAddTeam = async()=>{
+        const {name, emailList} = createTeamValue
+        if(name.trim() === ""){
+            showToast("Team name is required", 'error')
+            return
+        }
+
+
+        const apiData = {
+            name:name,
+            id:'',
+            add_member:[],
+            email_phone:emailList?.map((ele)=> ele)
+        }
+
+        setCreateTeamValue((prevState)=>({
+            ...prevState,
+            loading:true
+        }))
+
+        try {
+            const response = await teamsApi.cerateTeam(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.INSERTED_DATA[0]
+                showToast("Team created successfully", 'success')
+                toggleAddTeam()
+                addTeam(dbData)
+
+            }
+        } catch (error) {
+            
+        }finally{
+            setCreateTeamValue((prevState)=>({
+                ...prevState,
+                loading:false
+            }))
+
+        }
+    }
+
+
+    return { createTeamValue, toggleAddTeam, handleChangeTeam,handleBulkEmail,handleRemoveEmail,handleAddTeam }
 }
 
 

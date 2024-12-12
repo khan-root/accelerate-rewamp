@@ -16,7 +16,7 @@ const AddProject = (props) => {
     addOwner,handleSelectAddProject,
     handleSelectTemplate,
     pickerRef,handleColorPickerToggle,
-    handleAddNewProject
+    handleAddNewProject,handleUpdateProject
   } = props 
 
 
@@ -24,10 +24,12 @@ const AddProject = (props) => {
   const orgData = addProjectValue?.generalTemplates?.org_array
   const userData = addProjectValue?.generalTemplates?.user_array
 
+
+
   
   return (
     <>
-      <form className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4' onSubmit={handleAddNewProject}>
+      <form className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4' onSubmit={ addProjectValue?.update ? handleUpdateProject : handleAddNewProject}>
         <div className='space-y-5'>
           <div className='grid grid-cols-2 items-center gap-4'>
             <div className='space-y-1'>
@@ -35,7 +37,7 @@ const AddProject = (props) => {
               <input 
                   className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                   type='text' 
-                  value={addProjectValue.name}
+                  value={addProjectValue?.name}
                   name='name' 
                   onChange={handleChangeAddProject}
                   placeholder='Project Name'
@@ -49,14 +51,14 @@ const AddProject = (props) => {
                   <span className='relative'
                     style={{
                       transition: 'transform 0.2s ease-in-out',
-                      transform: addProjectValue.colorPicker ? 'rotate(90deg)' : 'rotate(0deg)',
+                      // transform: addProjectValue.colorPicker ? 'rotate(90deg)' : 'rotate(0deg)',
                     }}
                   >
                     <FaChevronRight />
                   </span>
                 </div>
                 <div className='absolute top-14 z-10' ref={pickerRef}>
-                {addProjectValue.colorPicker &&
+                {addProjectValue?.colorPicker &&
                     <Sketch
                       onChange={handleChangeAddProject}
                     />
@@ -71,7 +73,7 @@ const AddProject = (props) => {
               <input 
                   className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                   type='text' 
-                  value={addProjectValue.description}
+                  value={addProjectValue?.description}
                   name='description' 
                   onChange={handleChangeAddProject}
                   placeholder='Description'
@@ -84,7 +86,7 @@ const AddProject = (props) => {
               <input 
                   className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                   type='date' 
-                  value={addProjectValue.start_date}
+                  value={addProjectValue?.start_date}
                   name='start_date' 
                   onChange={handleChangeAddProject}
               />
@@ -94,7 +96,7 @@ const AddProject = (props) => {
               <input
                 className="w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100"
                 type="date"
-                value={addProjectValue.end_date}
+                value={addProjectValue?.end_date}
                 name="end_date"
                 onChange={handleChangeAddProject}
                 disabled={addProjectValue?.date_continue}
@@ -133,7 +135,7 @@ const AddProject = (props) => {
                   name='privacy'
                   value={ ele.id }
                   onChange={handleChangeAddProject}
-                  checked={addProjectValue.privacy == ele.id}
+                  checked={addProjectValue?.privacy == ele.id}
                 />
               ))}
             </div>
@@ -173,7 +175,16 @@ const AddProject = (props) => {
                 placeHolderTitle="Access" 
                 options={taskCreationData?.map((ele) => ({ value: ele.value, label:ele.title}))}
                 onChangeHandler={(selectedOption) => handleSelectAddProject(selectedOption, 'task_creation')}
-                value={addProjectValue?.task_creation}
+
+                value={
+                      taskCreationData?.find(option => option.value ===  addProjectValue?.task_creation) 
+                      ? { value: taskCreationData?.find(option => option.value ===  addProjectValue?.task_creation).value, 
+                          label: taskCreationData.find(option => option.value === addProjectValue?.task_creation).title
+
+                      }
+                      :
+                      addProjectValue?.task_creation
+                  }
               
               />
             </div>
@@ -187,7 +198,7 @@ const AddProject = (props) => {
                   name='task_access'
                   value={ ele.value }
                   onChange={handleChangeAddProject}
-                  checked={addProjectValue.task_access === ele.value}
+                  checked={addProjectValue?.task_access === ele.value}
                   label={
                     <Typography 
                       className='text-nowrap'
@@ -202,13 +213,13 @@ const AddProject = (props) => {
           <div>
             <CustomButton 
               type="submit"
-              // loading=
-              title="Submit"
+              loading={addProjectValue?.loading}
+              title={addProjectValue.update ? "Update" : "Submit"}
             />
           </div>
         </div>
-            
-        <div className='flex flex-col gap-14'>
+        <div className={` flex flex-col gap-14 relative ${addProjectValue?.update ? "pointer-events-none" : ""}`}>
+
           <div className='space-y-6'>
             <label className='text-[#698592] text-[15px]'>Select Project Workflow Pattern</label>
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3'>
@@ -243,7 +254,8 @@ const AddProject = (props) => {
                 ))}
             </div>
           </div>
-          <div className='space-y-4'>
+          <div className={` space-y-4 relative`}>
+         
             <div className='flex items-center gap-4'>
                   {generalTemplateData.map((ele)=>(
                       <div key={ele.id} 
@@ -321,6 +333,7 @@ const AddProject = (props) => {
               }
             </div>
           </div>
+          {addProjectValue?.update && <div className="absolute inset-0 bg-white bg-opacity-80 pointer-events-none"></div>}
         </div>
 
 

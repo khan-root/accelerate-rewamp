@@ -16,6 +16,7 @@ module.exports = withMT({
           200:'#F6F9FF',
           300:'#F4F2FF',
           500:'#92C9FB',
+          600:'#EFF8FF',
 
         },
         customBlack:{
@@ -28,23 +29,35 @@ module.exports = withMT({
           100:'#FF9E9E'
         },
         customPurple:{
-          100:'#AC9EFF'
+          100:'#AC9EFF',
+          200:'#EFECFF'
+
         },
         customGray:{
           100:'#f8f9fa',
           200:'#f8f9fe',
           300:'#979797',
-          400:'#00000020'
+          400:'#00000020',
+          500:'#BCBCBC',
+          600:'#F2F2F9',
         },
         customGreen:{
           100:'#28a745',
-          200:"#a4cf30"
+          200:"#a4cf30",
+          300:'#DBFFF5',
+          400:'#47D384'
         },
         customOrange:{
           100:'#fd9a00'
         },
         customRed:{
-          100:'#e8384f'
+          100:'#e8384f',
+          200:'#FFF0F4',
+          300:'#FF4979',
+        },
+        customYellow:{
+          100:'#F0A93D',
+          200:'#FDF2E2',
         }
       },
       boxShadow: {

@@ -10,6 +10,16 @@ const taskApi = {
                 ...data
             }
         })
+    },
+    taskCreate:function(data){
+        return axiosInstance.request({
+            method:'GET',
+            url:'/set_data.php',
+            params:{
+                'operation':'create_task',
+                ...data
+            }
+        })
     }
 }
 

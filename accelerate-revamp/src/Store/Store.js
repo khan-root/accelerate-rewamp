@@ -5,6 +5,7 @@ import projectsServices from "../viewModel/projectsViewModel/Projects";
 import teamsServices from "../viewModel/teamsViewModel/Team";
 import homeServices from "../viewModel/homeViewModel/Home";
 import milestonServices from "../viewModel/milestoneViewModel/Milestone";
+import backlogServices from "../viewModel/backlogViewModel/Backlog";
 
 const useStore = create(devtools((set, get)=>({
 
@@ -13,6 +14,7 @@ const useStore = create(devtools((set, get)=>({
     ...teamsServices(set, get),
     ...homeServices(set, get),
     ...milestonServices(set, get),
+    ...backlogServices(set, get),
 
 })))
 

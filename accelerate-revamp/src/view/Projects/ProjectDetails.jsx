@@ -1,18 +1,28 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useProjectDetailsServices from '../../viewModel/projectsViewModel/projectDetailsServices'
-import { projectDetailsToggleData } from '../../utils/projectsUtils'
+import { projectActonList, projectDetailsToggleData } from '../../utils/projectsUtils'
 import useTabToggle from '../../services/__tabToggleService'
 import { motion } from 'framer-motion'
 import CustomButton from '../../components/CustomButton'
 import { FaPlus, FaSort } from 'react-icons/fa6'
-import { Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
+import { Button, Card, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import { MdFilterAlt } from 'react-icons/md'
 import ProjectTable from './ProjectTable'
 import useMilestoneServices from '../../viewModel/milestoneViewModel/milestoneServices'
 import useAddTaskServices from '../../viewModel/projectsViewModel/AddTaskServices'
 import CustomDrawer from '../../components/CustomDrawer'
 import AddTask from './AddTask'
+import ProjectWorkFlowView from './ProjectWorkFlowView'
+import { DMYT } from '../../services/__dateTimeServices'
+import { LuClock5 } from 'react-icons/lu'
+import useMouseHoverService from '../../services/__mouseHoverService'
+import { HiDotsVertical } from 'react-icons/hi'
+import Wheel from '@uiw/react-color-wheel';
+import useAddProjectServices from '../../viewModel/projectsViewModel/addProjectServices'
+import AddProject from './AddProject'
+import useBacklogServices from '../../viewModel/backlogViewModel/backlogServices'
+
 
 const ProjectDetails = () => {
 
@@ -20,8 +30,13 @@ const ProjectDetails = () => {
         handleChangeEditTask ,handleSelectEditTask
 
     } = useProjectDetailsServices()
-    const projectInfo = projectTasksData?.data?.project_info
-    const tasksData = projectTasksData?.data?.project_tasks
+    const projectInfo = projectTasksData?.project_info
+    const tasksData = projectTasksData?.project_tasks
+
+
+   
+
+
 
     
     const {handleSinglTaskMileStone} = useMilestoneServices()
@@ -29,6 +44,7 @@ const ProjectDetails = () => {
     const params = useParams()
     useEffect(()=>{
         gettingProjectTasks(params.id)
+      
     },[])
 
 
@@ -36,17 +52,126 @@ const ProjectDetails = () => {
 
     const {addTaskHandle,addTaskValue,handleChangeAddTask,addMoreMileStone, removeMilestone,
         handleToggleSelectEmp,handleSelectAddTask,removeFromSelectedList,addToSelectedEmpList,
-        removeFromTeamMemberSelect,handleMultipleMSChange,handleDragEnd
+        removeFromTeamMemberSelect,handleMultipleMSChange,handleDragEnd,
+        mapRef,autocompleteService,placesServiceRef,center,places,searchQuery,onLoadMap,
+        onSearchChange,onSelectPlace,onMapClick,isLoaded,
+        handleSubmitTask
 
     } = useAddTaskServices(params.id)
 
+    const {isHovered, handleMouseEnter, handleMouseLeave} = useMouseHoverService()
+
+    const {handleProjectActionList,addProjectValue,toggleEditProject,handleColorPickerToggle, pickerRef, 
+        handleChangeAddProject,handleAddOwnerToggle,
+        addOwner,handleSelectAddProject,handleUpdateProject
+
+    } = useAddProjectServices()
+
+
+
+    const {handleBacklogs} = useBacklogServices()
+
   return (
     <>
-    <div className='ps-5 pt-10 grid grid-cols-12'>
-        <div className='col-span-3 shadow-lg rounded-[14px] h-[450px]'>
+    <div className='ps-5 pt-10 grid grid-cols-12 gap-4'>
+        <div className='col-span-3 shadow-lg rounded-[14px] h-[500px]'>
             <div className="">
-                <div style={{backgroundColor:projectInfo?.view_background}} className='p-4 h-[200px] rounded-tl-[7px] rounded-tr-[7px]'>
-                    <span>{projectInfo?.name}</span>
+                <div style={{backgroundColor:projectInfo?.view_background}} className='p-4 h-[250px] rounded-tl-[7px] rounded-tr-[7px] flex flex-col cursor-pointer relative'
+                    onMouseEnter={handleMouseEnter} // Trigger on hover
+                    onMouseLeave={handleMouseLeave} // Trigger on hover end
+                >
+                    <div className='flex items-top justify-end'>
+                        {isHovered && (
+                    <motion.div
+                        className='text-2xl text-white absolute right-2 top-3 z-4'
+                        whileHover={{
+                            scale: 1.3,
+                            transition: { duration: 0.2 }, // Smooth transition
+                        }}
+
+                        onClick={(e)=>e.stopPropagation()}
+                    >
+                        <Menu 
+                        //    dismiss={
+                        //         teamActionValue.showDialog ? { itemPress: false } : undefined
+                        //     }
+                            onClick={(e)=>e.stopPropagation()}
+                            // portal={{ inert: true }}
+                            dismiss={{
+                                itemPress: false,
+                            }}
+                        >
+                            <MenuHandler>
+                                <Button
+                                variant="text"
+                                className="text-base font-normal capitalize tracking-normal text-white p-0 bg-none"
+                                onClick={(e)=>e.stopPropagation()}
+                                >
+                                    <HiDotsVertical />
+                                </Button>
+                            </MenuHandler>
+                            <MenuList className="hidden w-[32rem] grid-cols-7 gap-4 overflow-visible lg:grid -mt-1"
+                            onClick={(e)=>e.stopPropagation()}
+                            >
+                                <Card
+                                    className="col-span-3 flex h-full w-full items-center justify-center shadow-none"
+                                >
+                                    <Typography variant="h6" color="blue-gray" className="mb-1">Choose Color</Typography>
+                                    
+                                    <Wheel
+                                        // color={teamActionValue?.color}
+                                        // onChange={(e)=>handleChangeTeamAction(e)}
+                                        // onClick={(e)=>e.stopPropagation()}
+                                    />
+                                    
+                            
+                                </Card>
+                                 <ul className="col-span-4 flex w-full flex-col gap-2" onClick={(e)=>e.stopPropagation()}>
+                                    {projectActonList.map(({ title, icon, id, color }) => (
+                                        <MenuItem key={id}>
+                                        
+                                    
+                                            <div className='flex items-center justify-between'>
+                                                <Typography variant="h6" color="blue-gray" className="mb-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent the event from bubbling up
+                                                        // handleTeamActionList(ele, id);
+                                                    }}
+                                                >
+                                                    {title}
+                                                </Typography>
+                                                <span className={`${color}`}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent the event from bubbling up
+                                                        handleProjectActionList(projectInfo, id);
+                                                    }}
+                                                >{icon}</span>
+                                            </div>
+                                        </MenuItem>
+                                    ))}
+                                    
+                                    <div className='flex items-center justify-between'>
+                                        <Button  className='text-white' onClick={(e)=>{e.stopPropagation()}}
+                                            // loading={teamActionValue?.loadingState === "update-color"}
+                                            
+                                            >Update Color</Button>
+                                    </div>
+                                </ul> 
+                            </MenuList>
+                        </Menu>
+                        
+                    </motion.div>
+                )} 
+                    </div>
+                    <div className='flex-1 flex items-center justify-center text-white text-[16px]'>
+                        <span>{projectInfo?.name}</span>
+                    </div>
+                    <div className='flex items-end justify-end'>
+                        <div className='flex flex-row items-center gap-2 text-white '>
+                            <span><LuClock5 /></span>
+                            {/* <span className=''>{DMYT(projectInfo?.creation_time_unix)}</span> */}
+                        </div>
+                    </div>
                     
                 </div>
                 <div className='p-4 rounded-bl-[7px] rounded-br-[7px]'>
@@ -99,77 +224,105 @@ const ProjectDetails = () => {
                     ))}
                 </div>
             </div>
-            <div className='flex items-center justify-between pe-12'>
+            {currentState === 1 ?
+            <>
+                <div className='flex items-center justify-between pe-12'>
+                    <div className='flex items-center gap-10'>
+                        <CustomButton 
+                            icon={<FaPlus />}
+                            title="Add Task"
+                            onClick={()=>addTaskHandle(tasksData[0].id)}
+
+
+                        />
+                        <CustomButton 
+                            title="Backlog"
+                            onClick={()=>handleBacklogs(params.id)}
+                        
+                        />
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <Menu>
+                            <MenuHandler className="cursor-pointer border border-customBlack-400 text-customBlack-400 flex flex-row items-center gap-1 px-3 py-1 rounded-xl text-[13px]">
+                                <div className=''>
+
+                                    <span><MdFilterAlt /></span>
+                                    <span>Filter</span>
+                                </div>
+                            </MenuHandler>
+                            <MenuList>
+                                <MenuItem className="flex items-center gap-2">
+                                
+                            
+                                    <Typography variant="small" className="font-medium">
+                                        My Profile
+                                    </Typography>
+                                </MenuItem>
+                                <MenuItem className="flex items-center gap-2 ">
+                                
+                                    <Typography variant="small" className="font-medium">
+                                        Log Out
+                                    </Typography>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                        <Menu>
+                            <MenuHandler className="cursor-pointer border border-customBlack-400 text-customBlack-400 flex flex-row items-center gap-1 px-3 py-1 rounded-xl text-[13px]">
+                                <div className=''>
+
+                                    <span><FaSort /></span>
+                                    <span>Filter Assigned By</span>
+                                </div>
+                            </MenuHandler>
+                            <MenuList>
+                                <MenuItem className="flex items-center gap-2">
+                                
+                            
+                                    <Typography variant="small" className="font-medium">
+                                        My Profile
+                                    </Typography>
+                                </MenuItem>
+                                <MenuItem className="flex items-center gap-2 ">
+                                
+                                    <Typography variant="small" className="font-medium">
+                                        Log Out
+                                    </Typography>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </div>
+                </div>
+                <div className='px-2'>
+                    <ProjectTable 
+                        tasksData = {tasksData}
+                        editProjectHandler ={editProjectHandler}
+                        editProjectTaskValue ={editProjectTaskValue}
+                        handleChangeEditTask ={handleChangeEditTask}
+                        handleSelectEditTask ={handleSelectEditTask}
+                        handleSinglTaskMileStone ={handleSinglTaskMileStone}
+                        addTaskHandle ={addTaskHandle}
+                    />
+                </div>
+            </>
+            :
+            <div className='space-y-4'>
                 <div>
                     <CustomButton 
                         icon={<FaPlus />}
                         title="Add Task"
                         onClick={addTaskHandle}
-
-
                     />
                 </div>
-                <div className='flex items-center gap-2'>
-                    <Menu>
-                        <MenuHandler className="cursor-pointer border border-customBlack-400 text-customBlack-400 flex flex-row items-center gap-1 px-3 py-1 rounded-xl text-[13px]">
-                            <div className=''>
-
-                                <span><MdFilterAlt /></span>
-                                <span>Filter</span>
-                            </div>
-                        </MenuHandler>
-                        <MenuList>
-                            <MenuItem className="flex items-center gap-2">
-                               
-                        
-                                <Typography variant="small" className="font-medium">
-                                    My Profile
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem className="flex items-center gap-2 ">
-                               
-                                <Typography variant="small" className="font-medium">
-                                    Log Out
-                                </Typography>
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
-                    <Menu>
-                        <MenuHandler className="cursor-pointer border border-customBlack-400 text-customBlack-400 flex flex-row items-center gap-1 px-3 py-1 rounded-xl text-[13px]">
-                            <div className=''>
-
-                                <span><FaSort /></span>
-                                <span>Filter Assigned By</span>
-                            </div>
-                        </MenuHandler>
-                        <MenuList>
-                            <MenuItem className="flex items-center gap-2">
-                               
-                        
-                                <Typography variant="small" className="font-medium">
-                                    My Profile
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem className="flex items-center gap-2 ">
-                               
-                                <Typography variant="small" className="font-medium">
-                                    Log Out
-                                </Typography>
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
+               <div className="overflow-x-auto w-full py-5">
+                    <div className="w-[calc(100vw-100px)]">
+                        <ProjectWorkFlowView 
+                            tasksData={tasksData}
+                            handleSinglTaskMileStone ={handleSinglTaskMileStone}
+                        />
+                    </div>
                 </div>
             </div>
-            <div className='px-2'>
-                <ProjectTable 
-                    tasksData = {tasksData}
-                    editProjectHandler ={editProjectHandler}
-                    editProjectTaskValue ={editProjectTaskValue}
-                    handleChangeEditTask ={handleChangeEditTask}
-                    handleSelectEditTask ={handleSelectEditTask}
-                    handleSinglTaskMileStone ={handleSinglTaskMileStone}
-                />
-            </div>
+            }
             
             
         </div>
@@ -191,6 +344,18 @@ const ProjectDetails = () => {
                     removeFromTeamMemberSelect = {removeFromTeamMemberSelect}
                     handleMultipleMSChange = {handleMultipleMSChange}
                     handleDragEnd = {handleDragEnd}
+                    mapRef = {mapRef}
+                    autocompleteService={autocompleteService}
+                    placesServiceRef={placesServiceRef}
+                    center={center}
+                    places={places}
+                    searchQuery={searchQuery}
+                    onLoadMap={onLoadMap}
+                    onSearchChange={onSearchChange}
+                    onSelectPlace={onSelectPlace}
+                    onMapClick={onMapClick}
+                    isLoaded={isLoaded}
+                    handleSubmitTask={handleSubmitTask}
 
                 />
             }
@@ -200,6 +365,29 @@ const ProjectDetails = () => {
         
         />
     }
+
+    {addProjectValue.update &&
+        <CustomDrawer 
+          open = {addProjectValue.update}
+          closeDrawer = {toggleEditProject}
+          compo ={
+            <AddProject 
+              handleUpdateProject = {handleUpdateProject}
+              handleAddOwnerToggle = {handleAddOwnerToggle}
+              handleChangeAddProject = {handleChangeAddProject}
+              addOwner = {addOwner}
+              handleSelectAddProject = {handleSelectAddProject}
+              handleColorPickerToggle = {handleColorPickerToggle}
+              pickerRef = {pickerRef}
+              addProjectValue = {addProjectValue}
+
+
+            />
+          }
+          title="Update Project"
+          widthSize = {1150}
+        />
+      }
     
     </>
   )

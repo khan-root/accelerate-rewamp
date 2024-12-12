@@ -25,6 +25,9 @@ const teamsServices = (set, get)=>({
     },
     deleteTeam: (id)=>{
         set({allTeams: get().allTeams.filter((ele)=> ele.id !== id)})
+    },
+    addTeam:(data)=>{
+        set({allTeams: [...new Set([data, ...get().allTeams])]})
     }
 })
 

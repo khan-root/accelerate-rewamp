@@ -81,13 +81,16 @@ const useHomeServices = ()=>{
         const dateString = `${String(day).padStart(2, "0")}-${String(
             month +1
         ).padStart(2, "0")}-${year}`; // Use passed month and year
+
+        console.log('dateString', dateString)
+        console.log('calendarData', calendarData.daysAttr)
         
-        const tasks = calendarData?.daysAttr?.find(
-            (att) => DDY(att.start) === dateString
-        );
-        // console.log('tasks', tasks)
+        // const tasks = calendarData?.daysAttr?.find(
+        //     (att) => DDY(att.start) === dateString
+        // );
+        // // console.log('tasks', tasks)
     
-        return tasks ? tasks.title : null;
+        // return tasks ? tasks.title : null;
     };
 
 
@@ -99,9 +102,9 @@ const useHomeServices = ()=>{
         const tasks = calendarData?.daysAttr?.find(
             (att) => DDY(att.start) === dateString
         );
-        console.log('tasks', tasks)
+        // console.log('tasks', tasks)
     
-        // return tasks ? tasks : null;
+        return tasks ? tasks : null;
     }
 
 

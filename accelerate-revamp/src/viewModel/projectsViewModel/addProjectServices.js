@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from "react"
 import projectsApi from "../../Model/Projects/Projetcs"
 import { showToast } from "../../components/Toaster/Toaster"
 import { getRandomHexColor } from "../../services/__projectsServices";
+import useStore from "../../Store/Store";
+import { gettingValue } from "../../services/__gettingSelectValue";
 
 const useAddProjectServices = ()=>{
+
+
+    const addNewProject = useStore((state)=> state.addNewProject)
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -38,7 +43,10 @@ const useAddProjectServices = ()=>{
       task_access:'PUBLIC',
       privacy:1,
       colorPicker:false,
-      color: getRandomHexColor()
+      color: getRandomHexColor(),
+      projectId:'',
+      update:false, 
+      loading:false
 
     })
 
@@ -123,7 +131,6 @@ const useAddProjectServices = ()=>{
 
 
     const addExtraPhase = () => {
-        console.log('Current Workflow:', addProjectValue.defaultWorkFlow);
         const { newPhase, defaultWorkFlow } = addProjectValue;
 
         if (newPhase.trim() === '') {
@@ -207,7 +214,6 @@ const useAddProjectServices = ()=>{
                 }))
             }
         }else{
-            console.log(event)
 
             setAddProjectValue((prevState)=>({
                 ...prevState,
@@ -423,16 +429,167 @@ const useAddProjectServices = ()=>{
                 
                 
             }
+
+            setAddProjectValue((prevState)=>({
+                ...prevState,
+                loading:true
+            }))
             
             try {
                 const response = await projectsApi.createProject(apiData)
+                const responseData = response.data 
+                if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                    const dbData = responseData?.DB_DATA?.data 
+                    toggleAddProject()
+                    showToast("Projet created successfully", 'success')
+                    addNewProject(dbData)
+                }else{
+                    const error = responseData.ERROR_DESCRIPTION 
+                    showToast(error, 'error')
+                }
                 console.log('response', response)
             } catch (error) {
                 
+            }finally{
+                setAddProjectValue((prevState)=>({
+                    ...prevState,
+                    loading:false
+                }))
             }
         }
     }
 
+
+
+
+    const handleProjectActionList = (data, id)=>{
+        const caseId = id 
+        switch (caseId) {
+            case 1:
+                getSingleProjectData(data)
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+
+
+    const getSingleProjectData = async(data)=>{
+
+        
+        const apiData = {id:data.id}
+        
+        console.log('data', data)
+        try{
+            const response = await projectsApi.projectDetails(apiData)
+            const responseData = response.data 
+            console.log('response', response)
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA
+
+                const owner = dbData?.owners?.find((ele)=> ele.id === data.owner_id)
+                console.log(owner)
+
+                setAddProjectValue((prevState)=>({
+                    ...prevState,
+                    projectId:data.id,
+                    owners:dbData?.owners,
+                    employees:dbData?.employees,
+                    usedWorkFlow:dbData?.mostly_used_workflows,
+                    generalTemplates:dbData?.generalTemplates,
+                    name:data.name,
+                    description:data.description,
+                    color:data.view_background,
+                    closing_date:'0',
+                    privacy:data.privacy,
+                    ownerId:{value: owner.id, label:owner.customer_name},
+                    employeeId:{value:data.supervisor_id, label:data.supervisor},
+                    task_creation:data.task_creation_access,
+                    task_access:data.project_accessibility,
+                    selecedWorkFlowId:data.workflow,
+                    update:true
+
+                }))
+            }else{
+                const error = responseData.ERROR_DESCRIPTION
+                showToast(error, "error")
+            }
+        }catch(err){
+            console.log('err', err)
+        }
+        
+    }
+
+
+
+    const toggleEditProject = ()=>{
+        setAddProjectValue((prevState)=>({
+            ...prevState,
+            update:false,
+            name:'',
+            employeeId:null,
+            description:'',
+            ownerId:null,
+            selecedWorkFlowId:''
+        }))
+    }
+
+
+    const handleUpdateProject = async(e)=>{
+        e.preventDefault()
+        const validation = createProjectValidation()
+
+        if(validation){
+            const {name, end_date, date_continue, start_date,selecedWorkFlowId,task_access,task_creation,
+                employeeId,privacy,description, color,ownerId, projectId
+            } = addProjectValue
+            const apiData = {
+                name: name,
+                closing_date: date_continue ? "" : end_date,
+                start_date: start_date,
+                template_id:selecedWorkFlowId,
+                id:projectId,
+                date_continue: date_continue ? 1 : '',
+                task_access:task_access,
+                task_creation:gettingValue(task_creation),
+                supervisor_id:employeeId?.value,
+                owner_id:gettingValue(ownerId),
+                privacy:privacy,
+                description:description,
+                color_code:color
+                
+                
+            }
+            setAddProjectValue((prevState)=>({
+                ...prevState,
+                loading:true
+            }))
+            
+            try {
+                const response = await projectsApi.createProject(apiData)
+                const responseData = response.data 
+                if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                    const dbData = responseData?.DB_DATA?.data 
+                    // toggleAddProject()
+                    showToast("Projet Updated successfully", 'success')
+                    // addNewProject(dbData)
+                }else{
+                    const error = responseData.ERROR_DESCRIPTION 
+                    showToast(error, 'error')
+                }
+                console.log('response', response)
+            } catch (error) {
+                
+            }finally{
+                setAddProjectValue((prevState)=>({
+                    ...prevState,
+                    loading:false
+                }))
+            }
+        }
+    }
 
 
     return {
@@ -450,7 +607,10 @@ const useAddProjectServices = ()=>{
         handleSelectTemplate,
         handleColorPickerToggle,
         pickerRef,
-        handleAddNewProject
+        handleAddNewProject,
+        handleProjectActionList,
+        toggleEditProject,
+        handleUpdateProject
     }
 
 }

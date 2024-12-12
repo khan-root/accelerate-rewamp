@@ -30,6 +30,16 @@ const teamsApi = {
             }
         })
     },
+    cerateTeam:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            data:{
+                'operation':'set_team',
+                ...data
+            }
+        })
+    },
     deleteTeam:function(data){
         return axiosInstance.request({
             method:"DELETE",

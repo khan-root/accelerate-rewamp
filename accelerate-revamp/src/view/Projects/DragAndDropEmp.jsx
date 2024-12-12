@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { motion } from "framer-motion";
 import { FaXmark } from "react-icons/fa6";

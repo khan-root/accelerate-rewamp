@@ -80,6 +80,7 @@ const Calendar = (props) => {
                     const colors = titleNameAlpha(attLabel)
                     const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
                     const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
+                    console.log('taskCount', taskCount)
                     const isToday =
                     day === today.getDate() &&
                     today.getMonth() === calendarData.month.value - 1;
@@ -98,7 +99,7 @@ const Calendar = (props) => {
 
                             }`}
 
-                            style={{color: colors?.bgColor ? colors?.bgColor : "", backgroundColor: colors?.bgColor ? rgbaColor : ""}}
+                            style={{color: colors?.bgColor ? `${colors?.bgColor} !important` : "", backgroundColor: `${colors?.bgColor}!important` ? rgbaColor : ""}}
                         >
                             <span className='text-[20px] flex-1 flex items-start ps-3 pt-2'>
                                 {day}

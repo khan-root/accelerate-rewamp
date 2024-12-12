@@ -5,4 +5,5 @@ export const headerData = [
     {id:4, title:'Workflows', link:'/workflows'},
     {id:5, title:'Quick Access'},
     {id:6, title:'Mobile App'},
+    {id:7, title:'Statistics',link:'/statistics'}
 ]

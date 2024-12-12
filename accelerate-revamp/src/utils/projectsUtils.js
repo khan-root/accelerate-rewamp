@@ -1,3 +1,4 @@
+import { FaStar } from "react-icons/fa6"
 import { HiMiniTrash } from "react-icons/hi2"
 import { MdModeEdit } from "react-icons/md"
 
@@ -38,8 +39,8 @@ export const taskCreationData = [
 
 
 export const projectActonList = [
-    {id:1, title:'Edit Team', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
-    {id:2, title:'Delete Team', icon:<HiMiniTrash />, color:'text-red-600'}
+    {id:1, title:'Edit Project', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
+    {id:2, title:'Add to Favourite', icon:<FaStar />, color:'text-customYellow-100'}
 ]
 
 

@@ -6,7 +6,7 @@ import { FaXmark } from 'react-icons/fa6'
 import CustomButton from '../../components/CustomButton'
 
 const CreateTeam = (props) => {
-    const {handleChangeTeam ,createTeamValue,handleBulkEmail, handleRemoveEmail} = props
+    const {handleChangeTeam ,createTeamValue,handleBulkEmail, handleRemoveEmail,handleAddTeam} = props
     const {tabToggleState, currentState} = useTabToggle()
   return (
     <div className='space-y-5'>
@@ -70,9 +70,9 @@ const CreateTeam = (props) => {
                         {createTeamValue?.emailList?.map((ele, i)=>(
                             <div key={i} className='flex items-center justify-between gap-2 bg-customBlue-100 rounded-full p-2'>
                                 <span className='text-white text-[13px]'>{ele}</span>
-                                <span className='h-5 w-5 flex items-center justify-center text-white bg-red-600 rounded-full'
+                                <motion.span whileHover={{scale:1.1}} className='h-5 w-5 flex items-center justify-center text-white bg-red-600 rounded-full cursor-pointer text-[13px]'
                                     onClick={()=>handleRemoveEmail(i)}
-                                ><FaXmark /></span>
+                                ><FaXmark /></motion.span>
                             </div>
                         ))
 
@@ -90,6 +90,9 @@ const CreateTeam = (props) => {
         <div>
             <CustomButton 
                 title="Submit"
+                type="button"
+                onClick={handleAddTeam}
+                loading = {createTeamValue.loading}
             />
         </div>
     </div>

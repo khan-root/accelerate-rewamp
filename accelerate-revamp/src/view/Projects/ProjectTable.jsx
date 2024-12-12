@@ -19,7 +19,7 @@ const currentUnixTimestamp = Math.floor(Date.now() / 1000);
 
 const ProjectTable = (props) => {
     const {tasksData,editProjectHandler, editProjectTaskValue,handleChangeEditTask, handleSelectEditTask,
-        handleSinglTaskMileStone
+        handleSinglTaskMileStone,addTaskHandle
     } = props
 
 
@@ -74,7 +74,7 @@ const ProjectTable = (props) => {
                             >
                             {ele?.name}
                             </span>
-                            <span><FaPlus /></span>
+                            <motion.span whileHover={{scale:1.1}} onClick={()=>addTaskHandle(ele.id)} className='cursor-pointer'><FaPlus /></motion.span>
                         </div>
                         </td>
                     </tr>

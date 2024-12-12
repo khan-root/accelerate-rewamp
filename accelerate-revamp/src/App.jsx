@@ -3,6 +3,8 @@ import CustomNavbar from './components/CustomNavbar'
 import { Router } from './Routers'
 import Footer from './components/Footer'
 import { Toaster } from './components/Toaster/Toaster'
+import 'react-calendar/dist/Calendar.css';
+
 
 const App = () => {
   return (
