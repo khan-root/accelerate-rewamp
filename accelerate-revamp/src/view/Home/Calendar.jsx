@@ -100,12 +100,12 @@ const Calendar = (props) => {
                             className={`w-full h-full flex flex-col rounded-xl relative -z-10 ${
                                 isWeekend ? "bg-[#FDEFEE]" : "hover:border hover:border-customGray-blueGray bg-[#F9FAFC]"
                             }`}
-                            style={{ backgroundColor: rgbaColor }}
+                            style={{ backgroundColor: colors.bgColor }}
                         >
                             <span className="text-[20px] flex-1 flex items-start ps-3 pt-2">{day}</span>
                             <span
                                 className="flex-1 flex items-start ps-3 text-[15px] font-semibold"
-                                style={{ color: colors?.bgColor }}
+                                style={{ color: colors?.text }}
                             >
                                 {taskCount > 0 ? `${taskCount} ${taskCount > 1 ? "Tasks" : "Task"}` : ""}
                             </span>
