@@ -86,6 +86,7 @@ const Calendar = (props) => {
                 const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
                 const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
                 const isWeekend = getDayOfWeek(day) === 0 || getDayOfWeek(day) === 6;
+                console.log('colors',colors)
 
 
                 return day ? (
@@ -100,12 +101,12 @@ const Calendar = (props) => {
                             className={`w-full h-full flex flex-col rounded-xl relative -z-10 ${
                                 isWeekend ? "bg-[#FDEFEE]" : "hover:border hover:border-customGray-blueGray bg-[#F9FAFC]"
                             }`}
-                            style={{ backgroundColor: colors.bgColor }}
+                            style={{ backgroundColor: colors?.bgColor }}
                         >
                             <span className="text-[20px] flex-1 flex items-start ps-3 pt-2">{day}</span>
                             <span
                                 className="flex-1 flex items-start ps-3 text-[15px] font-semibold"
-                                style={{ color: colors?.text }}
+                                style={{ color: colors?.textColor }}
                             >
                                 {taskCount > 0 ? `${taskCount} ${taskCount > 1 ? "Tasks" : "Task"}` : ""}
                             </span>

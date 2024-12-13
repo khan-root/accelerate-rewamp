@@ -46,16 +46,18 @@ export function titleNameAlpha (title){
         const colorObj = colors.find(obj => obj[firstLetter]);
         
         if (colorObj) {
-            const { bg: bgColor } = colorObj[firstLetter];
+            const { bg: bgColor, text: textColor } = colorObj[firstLetter];
             return {
                 firstLetter,
                 bgColor,
+                textColor
             };
         }
         
         return {
             firstLetter,
-            bgColor: '#000', // Replace with your default color
+            bgColor: '#000', // Replace with your default color,
+            textColor: '#EEE'
         };
     }
 }
