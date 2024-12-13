@@ -7,6 +7,14 @@ const useHomeServices = ()=>{
 
     const getInComingTasks = useStore((state)=> state.getInComingTasks)
     const inComingTasks = useStore((state)=> state.inComingTasks)
+    const gettingHomeTask = useStore((state)=> state.gettingHomeTask)
+    const homeTaskData = useStore((state)=> state.homeTaskData)
+
+
+    const calendarTasks = homeTaskData?.calender_tasks
+    const categoryTasks = homeTaskData?.categorized_tasks
+
+
 
 
     let date  = new Date()
@@ -25,13 +33,32 @@ const useHomeServices = ()=>{
         daysAttr:[]
     })
 
+    const [toggleValue, setToggleValue] = useState({
+        main:1,
+        sub:1,
+        taskData:[],
+    })
+
+
 
     useEffect(()=>{
-        setCalendarData((prevState)=>({
-            ...prevState,
-            daysAttr:inComingTasks?.calender_task
-        }))
-    },[inComingTasks])
+
+        if(toggleValue.main === 1){
+            setCalendarData((prevState)=>({
+                ...prevState,
+                daysAttr:calendarTasks?.incoming
+            }))
+        }else{
+            setCalendarData((prevState)=>({
+                ...prevState,
+                daysAttr:calendarTasks?.outgoing
+            }))
+            
+        }
+    },[calendarTasks])
+
+
+   
 
 
 
@@ -82,37 +109,121 @@ const useHomeServices = ()=>{
             month +1
         ).padStart(2, "0")}-${year}`; // Use passed month and year
 
-        console.log('dateString', dateString)
-        console.log('calendarData', calendarData.daysAttr)
-        
-        // const tasks = calendarData?.daysAttr?.find(
-        //     (att) => DDY(att.start) === dateString
-        // );
-        // // console.log('tasks', tasks)
-    
-        // return tasks ? tasks.title : null;
-    };
-
-
-    const getCalendarTasks = (day, month, year)=>{
-        const dateString = `${String(day).padStart(2, "0")}-${String(
-            month +1
-        ).padStart(2, "0")}-${year}`; // Use passed month and year
         
         const tasks = calendarData?.daysAttr?.find(
             (att) => DDY(att.start) === dateString
         );
-        // console.log('tasks', tasks)
     
-        return tasks ? tasks : null;
+        return tasks ? tasks.title : null;
+    };
+
+
+    const getCalendarTasks = (day, month, year) => {
+        const dateString = `${String(day).padStart(2, "0")}-${String(
+            month + 1
+        ).padStart(2, "0")}-${year}`; // Use passed month and year
+
+        const tasks = calendarData?.daysAttr?.filter(
+            (att) => DDY(att.start) === dateString
+        );
+
+        return tasks ? tasks.length : 0; // Return the count of tasks
+    };
+    const getCalendarTasksLabel = (day, month, year) => {
+        const dateString = `${String(day).padStart(2, "0")}-${String(
+            month + 1
+        ).padStart(2, "0")}-${year}`; // Use passed month and year
+
+        const tasks = calendarData?.daysAttr?.filter(
+            (att) => DDY(att.start) === dateString
+        );
+
+        return tasks ? tasks : 0; // Return the count of tasks
+    };
+
+
+
+
+     useEffect(()=>{
+        
+        if(toggleValue.main === 1){
+            if(toggleValue.sub === 1){
+                setToggleValue((prevState)=>({
+                    ...prevState,
+                    taskData:categoryTasks?.incoming_due
+                }))
+
+            }else{
+                setToggleValue((prevState)=>({
+                    ...prevState,
+                    taskData:categoryTasks?.incoming_overdue
+                }))
+
+            }
+            setCalendarData((prevState)=>({
+                ...prevState,
+                daysAttr:calendarTasks?.incoming
+            }))
+        }
+        else if(toggleValue.main === 2){
+            if(toggleValue.sub === 1){
+                setToggleValue((prevState)=>({
+                    ...prevState,
+                    taskData:categoryTasks?.outgoing_due
+
+                }))
+
+            }else{
+                setToggleValue((prevState)=>({
+                    ...prevState,
+                    taskData:categoryTasks?.outgoing_overdue
+                }))
+
+            }
+            setCalendarData((prevState)=>({
+                ...prevState,
+                daysAttr:calendarTasks?.outgoing
+            }))
+        }
+
+        
+        
+
+    },[toggleValue.main, toggleValue.sub])
+    
+
+
+
+
+    const toggleState = (label, id)=>{
+        console.log('homeTaskData', homeTaskData)
+        if(label === 'main'){
+            
+            setToggleValue((prevState)=>({
+                ...prevState,
+                main:id
+            }))
+            }else{
+            setToggleValue((prevState)=>({
+                ...prevState,
+                sub:id
+            }))
+
+        }
     }
+
+
 
 
 
     return {
         calendarData, getInComingTasks,
         getCalendarTaskLabel,
-        getCalendarTasks
+        getCalendarTasks,
+        gettingHomeTask,
+        getCalendarTasksLabel,
+        toggleState,
+        toggleValue
     }
 
 

@@ -19,6 +19,8 @@ import RejectMilestone from './RejectMilestone'
 import useAddUserTaskMileston from '../../viewModel/milestoneViewModel/AddUserMilestone'
 import CustomDialog from '../../components/CustomDialog'
 import AddMemberMileston from './AddMemberMileston'
+import Inbox from './Inbox'
+import useInboxServices from '../../viewModel/milestoneViewModel/inboxServices'
 
 const Mileston = () => {
 
@@ -56,9 +58,11 @@ const Mileston = () => {
 
     const { addMemberToTask, toggleAddMemmberToTask,handleSelectAddMemberToTask, removeTaskMemeberLsit, handleAddMemberToTask} = useAddUserTaskMileston(params.id, employeeDetails)
 
+    const {toggleInboxState, handleToggleInboxState} = useInboxServices(params.id)
+
   return (
     <>
-        <div className='px-10 py-5 grid grid-cols-12 '>
+        <div className='ps-10 pe-2 py-5 grid grid-cols-12 gap-2 '>
             <div className='col-span-3 shadow-lg rounded-[14px] h-auto'>
                 <div className="sticky top-5 z-10 bg-white">
                     <div style={{backgroundColor:taskDetails?.view_background}} className='p-4 h-[200px] rounded-tl-[7px] rounded-tr-[7px] flex items-center justify-center text-white text-wrap text-center'>
@@ -94,7 +98,7 @@ const Mileston = () => {
                     </div> 
                 </div>
             </div>
-            <div className='col-span-7 ps-3 space-y-2'>
+            <div className='col-span-6 ps-3 space-y-2'>
                 <div className='space-y-3'>
                     <div className='flex items-center gap-2'>
                         <div>
@@ -198,6 +202,12 @@ const Mileston = () => {
                     </div>
                 
                 
+            </div>
+            <div className='col-span-3 border border-black h-[calc(100vh-140px)] flex items-end sticky top-5'>
+                <Inbox 
+                    toggleInboxState ={toggleInboxState} 
+                    handleToggleInboxState = {handleToggleInboxState}
+                />      
             </div>
         </div>
         {(addMilestoneValue?.show || addMilestoneValue.update) &&

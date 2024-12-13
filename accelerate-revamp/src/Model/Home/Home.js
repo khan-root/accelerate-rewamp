@@ -9,7 +9,16 @@ const homeApi = {
                 'operation': 'incoming_tasks' 
             }
         })
-    }
+    },
+    homeTask:function(){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation': 'tasks' 
+            }
+        })
+    },
 }
 
 

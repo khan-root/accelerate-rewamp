@@ -8,13 +8,6 @@ import { useParams } from 'react-router'
 import { motion } from 'framer-motion'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 
-const categoryData = [
-    {id:1, name:'Conversation'},
-    {id:2, name:'Conversation'},
-    {id:3, name:'Conversation'},
-    {id:4, name:'Conversation'},
-    {id:5, name:'Conversation'},
-]
 
 const Backlog = () => {
 
@@ -29,11 +22,23 @@ const Backlog = () => {
     const {gettingAllCategories, backlogCatLabValue,handleAddCategoryToggle,handleAddLabelToggle,
         handleChangeBacklog,handleSubmitCategory,categories,
         deleteActionValue,toggleDeleteCategory,toggleDeleteLabel,confirmDeleteCategory,
-        handleUpdateCategoryToggle,handleUpdateCategory
+        handleUpdateCategoryToggle,handleUpdateCategory,
+        handleSubmitLabel,
+        gettingAllLabels,
+        labels,confirmDeleteLabel,
+        handleUpdateLabelToggle,
+        handleUpdateLabel,getAllBacklogs,backlogs
+
     } = useBacklogServices()
     useEffect(()=>{
         gettingAllCategories(params.id)
+        gettingAllLabels(params.id)
+        getAllBacklogs(params.id)
     },[])
+
+
+
+    
     
   return (
     <>
@@ -124,25 +129,56 @@ const Backlog = () => {
                                         <input 
                                             className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                                             type='text' 
-                                            placeholder='Add Category'
+                                            placeholder='Add Label'
+                                            name="label"
+                                            onChange={handleChangeBacklog}
+
                                         />
                                     </div>
                                     <div className='flex items-center gap-2 mt-4'>
-                                        <span className='text-customGreen-100'><FaCheck /></span>
+                                        <span className='text-customGreen-100' onClick={()=>handleSubmitLabel(params.id)}><FaCheck /></span>
                                         <span className='text-customRed-100' onClick={()=>handleAddLabelToggle(params.id)}><FaXmark /></span>
                                     </div>
                                 </div>
                             }
                             <div className='flex flex-col gap-2'>
-                                {categoryData.map((ele)=>(
-                                    <div key={ele.id} className='flex items-center gap-2 border-b border-b-customGray-600 py-2'>
+                                {labels?.map((ele)=>(
+                                    <div key={ele?._id} className='flex items-center gap-2 border-b border-b-customGray-600 py-2'>
                                         <div className='flex-1'>
-                                            <span>{ele.name}</span>
+                                            {(backlogCatLabValue.updateLabel && ele._id === backlogCatLabValue.id) ? 
+                                                <input 
+                                                    className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
+                                                    type='text' 
+                                                    placeholder='Update Label'
+                                                    name='label'
+                                                    value={backlogCatLabValue?.label}
+                                                    onChange={handleChangeBacklog}
+                                                />
+                                            :
+                                            <span>{ele?.label_name}</span>
+                                            }
                                         </div>
+
+                                        {(backlogCatLabValue.updateLabel && ele._id == backlogCatLabValue.id) ? 
+                                            <div className='flex items-center gap-2'>
+                                                <motion.span whileHover={{scale:1.1}} className='text-customGreen-100 cursor-pointer' 
+                                                    onClick={()=>handleUpdateLabel(ele._id)}
+                                                ><FaCheck /></motion.span>
+                                                <motion.span whileHover={{scale:1.1}} className='text-customRed-100 cursor-pointer'
+                                                    onClick={()=> handleUpdateLabelToggle(ele)}
+                                                ><FaXmark /></motion.span>
+                                            </div>
+                                        
+                                        :
                                         <div className='flex items-center gap-2'>
-                                            <span className='text-customGreen-100'><MdEdit /></span>
-                                            <span className='text-customRed-100'><IoMdTrash /></span>
+                                            <motion.span whileHover={{scale:1.1}} className='text-customGreen-100 cursor-pointer' 
+                                                onClick={()=>handleUpdateLabelToggle(ele)}
+                                            ><MdEdit /></motion.span>
+                                            <motion.span whileHover={{scale:1.1}} className='text-customRed-100 cursor-pointer'
+                                                onClick={()=> toggleDeleteLabel(ele._id)}
+                                            ><IoMdTrash /></motion.span>
                                         </div>
+                                        }
                                     </div>
                                 ))}
                             </div>
@@ -152,7 +188,10 @@ const Backlog = () => {
                 </div>
             </div>
             <div className='col-span-9 ps-3'>
-                <BacklogDetails />
+                <BacklogDetails 
+                    backlogs = {backlogs}
+                
+                />
             </div> 
         </div>
         {(deleteActionValue.showCategoryDelete || deleteActionValue.showLabelDelete) && 
@@ -189,7 +228,7 @@ const Backlog = () => {
                     deleteActionValue.showCategoryDelete ?
                     confirmDeleteCategory :
                     deleteActionValue.showLabelDelete ?
-                    toggleDeleteLabel :
+                    confirmDeleteLabel :
                     null
                 }
                 loading = {

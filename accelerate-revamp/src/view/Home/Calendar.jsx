@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import { LuLayoutList } from 'react-icons/lu'
 import { calendarToggleData } from '../../utils/homeUtils';
 import useTabToggle from '../../services/__tabToggleService';
 import { hexToRGBA, titleNameAlpha } from '../../services/__colorServices';
 
 const Calendar = (props) => {
-    const {tabToggleState, currentState} = useTabToggle()
-    const { calendarData, getCalendarTaskLabel, getCalendarTasks} = props;
+    const {tabToggleState, currentState,} = useTabToggle()
+    const { calendarData, getCalendarTaskLabel, getCalendarTasks,getCalendarTasksLabel} = props;
     const today = new Date(); // Current date
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -16,6 +17,8 @@ const Calendar = (props) => {
         return date.getDay(); // 0 = Sunday, 6 = Saturday
     };
 
+
+    const [hoveredDay, setHoveredDay] = useState(null);
 
     return (
         <div className="w-full">
@@ -75,44 +78,68 @@ const Calendar = (props) => {
                     </div>
                 ))}
 
-                {calendarData?.daysArray?.map((day, index) => {
-                    const attLabel = getCalendarTaskLabel(day, calendarData.month.value - 1, calendarData.year.value);
-                    const colors = titleNameAlpha(attLabel)
-                    const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
-                    const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
-                    console.log('taskCount', taskCount)
-                    const isToday =
-                    day === today.getDate() &&
-                    today.getMonth() === calendarData.month.value - 1;
+                <>
+            {calendarData?.daysArray?.map((day, index) => {
+                const attLabel = getCalendarTaskLabel(day, calendarData.month.value - 1, calendarData.year.value);
+                const dayTasks = getCalendarTasksLabel(day, calendarData.month.value - 1, calendarData.year.value)
+                const colors = titleNameAlpha(attLabel);
+                const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
+                const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
+                const isWeekend = getDayOfWeek(day) === 0 || getDayOfWeek(day) === 6;
 
-                    const dayOfWeek = day ? getDayOfWeek(day) : null;
-                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // Sunday or Saturday
 
-                    return day ? (
-                        <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            key={index}
-                            className={`w-full h-[100px] flex flex-col rounded-xl relative cursor-pointer ${
-                                isWeekend
-                                ? "!bg-[#FDEFEE]"
-                                : "hover:border hover:border-customGray-blueGray bg-[#F9FAFC]"
-
+                return day ? (
+                    <motion.div 
+                        whileHover={{scale:1.06}}
+                        key={index}
+                        className="w-full h-[100px] flex flex-col rounded-xl cursor-pointer"
+                        onMouseEnter={() => setHoveredDay({ day, tasks: taskCount })}
+                        onMouseLeave={() => setHoveredDay(null)}
+                    >
+                        <div
+                            className={`w-full h-full flex flex-col rounded-xl relative -z-10 ${
+                                isWeekend ? "bg-[#FDEFEE]" : "hover:border hover:border-customGray-blueGray bg-[#F9FAFC]"
                             }`}
-
-                            style={{color: colors?.bgColor ? `${colors?.bgColor} !important` : "", backgroundColor: `${colors?.bgColor}!important` ? rgbaColor : ""}}
+                            style={{ backgroundColor: rgbaColor }}
                         >
-                            <span className='text-[20px] flex-1 flex items-start ps-3 pt-2'>
-                                {day}
+                            <span className="text-[20px] flex-1 flex items-start ps-3 pt-2">{day}</span>
+                            <span
+                                className="flex-1 flex items-start ps-3 text-[15px] font-semibold"
+                                style={{ color: colors?.bgColor }}
+                            >
+                                {taskCount > 0 ? `${taskCount} ${taskCount > 1 ? "Tasks" : "Task"}` : ""}
+                            </span>
+                        </div>
 
-                            </span>
-                            <span className='flex-1 flex items-start ps-3'>
-                                Tasks
-                            </span>
-                        </motion.div>
-                    ) : (
-                        <div key={index} className="px-4 py-2"></div>
-                    );
-                })}
+                        {/* Popover */}
+                        {hoveredDay?.day === day && (
+                            <div className="absolute right-[-300px] bg-white p-4 rounded-lg shadow-lg z-50 w-[400px]">
+                                <p className="text-gray-500 text-sm font-semibold">{`Tasks for ${day}`}</p>
+                                {dayTasks?.length > 0 ? (
+                                    <ul className="mt-2 space-y-1">
+                                        {dayTasks.map((task, i) => (
+                                            <motion.li 
+                                                whileHover={{scale:1.04}}
+                                                key={i}
+                                                className="flex items-center gap-2 text-customBlack-400 text-[13px] overflow-hidden cursor-pointer"
+                                            >
+                                                <span><LuLayoutList /></span>
+                                                {task.title} {/* Displaying task title */}
+                                            </motion.li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-gray-400 mt-2 text-sm">No tasks for this day</p>
+                                )}
+                            </div>
+                        )}
+
+                    </motion.div>
+                ) : (
+                    <div key={index} className="px-4 py-2"></div>
+                );
+            })}
+            </>
             </div>
         </div>
     );

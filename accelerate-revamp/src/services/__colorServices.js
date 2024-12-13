@@ -1,5 +1,17 @@
+export const getTextColor = (hex) => {
+    // if (!hex) return '#000000'; // Default fallback
+    const r = parseInt(hex?.slice(1, 3), 16);
+    const g = parseInt(hex?.slice(3, 5), 16);
+    const b = parseInt(hex?.slice(5, 7), 16);
+
+    // Calculate brightness
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    console.log('brightness', brightness)
+
+    return brightness // Black for light bg, White for dark bg
+};
 export const colors = [
-  { A: { bg: '#B4F5DE' } },
+  { A: { bg: '#B4F5DE', text:'' } },
   { B: { bg: '#BDB3F8' } },
   { C: { bg: '#FEACC0' } },
   { D: { bg: '#DFE590' } },
@@ -15,7 +27,7 @@ export const colors = [
   { N: { bg: '#E5B490' } },
   { O: { bg: '#CEB6E7' } },
   { P: { bg: '#F697E1' } },
-  { Q: { bg: '#F7F99B' } },
+  { Q: { bg: '#FDF9E5' } },
   { R: { bg: '#B4C2F5' } },
   { S: { bg: '#B3F8EF' } },
   { T: { bg: '#EEACFE' } },
