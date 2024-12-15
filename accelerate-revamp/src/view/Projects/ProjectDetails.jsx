@@ -22,6 +22,7 @@ import Wheel from '@uiw/react-color-wheel';
 import useAddProjectServices from '../../viewModel/projectsViewModel/addProjectServices'
 import AddProject from './AddProject'
 import useBacklogServices from '../../viewModel/backlogViewModel/backlogServices'
+import { HiOutlineStar, HiStar } from 'react-icons/hi2'
 
 
 const ProjectDetails = () => {
@@ -55,7 +56,7 @@ const ProjectDetails = () => {
         removeFromTeamMemberSelect,handleMultipleMSChange,handleDragEnd,
         mapRef,autocompleteService,placesServiceRef,center,places,searchQuery,onLoadMap,
         onSearchChange,onSelectPlace,onMapClick,isLoaded,
-        handleSubmitTask
+        handleSubmitTask,
 
     } = useAddTaskServices(params.id)
 
@@ -63,7 +64,9 @@ const ProjectDetails = () => {
 
     const {handleProjectActionList,addProjectValue,toggleEditProject,handleColorPickerToggle, pickerRef, 
         handleChangeAddProject,handleAddOwnerToggle,
-        addOwner,handleSelectAddProject,handleUpdateProject
+        addOwner,handleSelectAddProject,handleUpdateProject,
+        projectActionValue,
+        handleChangeProjectAction,handleFavProject
 
     } = useAddProjectServices()
 
@@ -82,86 +85,111 @@ const ProjectDetails = () => {
                 >
                     <div className='flex items-top justify-end'>
                         {isHovered && (
-                    <motion.div
-                        className='text-2xl text-white absolute right-2 top-3 z-4'
-                        whileHover={{
-                            scale: 1.3,
-                            transition: { duration: 0.2 }, // Smooth transition
-                        }}
+                            <motion.div
+                                className='text-2xl text-white absolute right-2 top-3 z-4'
+                                whileHover={{
+                                    scale: 1.3,
+                                    transition: { duration: 0.2 }, // Smooth transition
+                                }}
 
-                        onClick={(e)=>e.stopPropagation()}
-                    >
-                        <Menu 
-                        //    dismiss={
-                        //         teamActionValue.showDialog ? { itemPress: false } : undefined
-                        //     }
-                            onClick={(e)=>e.stopPropagation()}
-                            // portal={{ inert: true }}
-                            dismiss={{
-                                itemPress: false,
+                                onClick={(e)=>e.stopPropagation()}
+                            >
+                                <Menu 
+                                //    dismiss={
+                                //         teamActionValue.showDialog ? { itemPress: false } : undefined
+                                //     }
+                                    onClick={(e)=>e.stopPropagation()}
+                                    // portal={{ inert: true }}
+                                    dismiss={{
+                                        itemPress: false,
+                                    }}
+                                >
+                                    <MenuHandler>
+                                        <Button
+                                        variant="text"
+                                        className="text-base font-normal capitalize tracking-normal text-white p-0 bg-none"
+                                        onClick={(e)=>e.stopPropagation()}
+                                        >
+                                            <HiDotsVertical />
+                                        </Button>
+                                    </MenuHandler>
+                                    <MenuList className="hidden w-[32rem] grid-cols-7 gap-4 overflow-visible lg:grid -mt-1"
+                                    onClick={(e)=>e.stopPropagation()}
+                                    >
+                                        <Card
+                                            className="col-span-3 flex h-full w-full items-center justify-center shadow-none"
+                                        >
+                                            <Typography variant="h6" color="blue-gray" className="mb-1">Choose Color</Typography>
+                                            
+                                            <Wheel
+                                                color={projectActionValue?.color}
+                                                onChange={(e)=>handleChangeProjectAction(e)}
+                                                onClick={(e)=>e.stopPropagation()}
+                                            />
+                                            
+                                    
+                                        </Card>
+                                        <ul className="col-span-4 flex w-full flex-col gap-2" onClick={(e)=>e.stopPropagation()}>
+                                            {projectActonList.map(({ title, icon, id, color }) => (
+                                                <MenuItem key={id}>
+                                                
+                                            
+                                                    <div className='flex items-center justify-between'>
+                                                        <Typography variant="h6" color="blue-gray" className="mb-1"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent the event from bubbling up
+                                                                // handleTeamActionList(ele, id);
+                                                            }}
+                                                        >
+                                                            {title}
+                                                        </Typography>
+                                                        <span className={`${color}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent the event from bubbling up
+                                                                handleProjectActionList(projectInfo, id);
+                                                            }}
+                                                        >{icon}</span>
+                                                    </div>
+                                                </MenuItem>
+                                            ))}
+                                            
+                                            <div className='flex items-center justify-between'>
+                                                <Button  style={{backgroundColor: projectActionValue?.color}} className='text-white'
+                                                // onClick={(e)=>{e.stopPropagation()}}
+                                                    // loading={teamActionValue?.loadingState === "update-color"}
+                                                    
+                                                    >Update Color</Button>
+                                            </div>
+                                        </ul> 
+                                    </MenuList>
+                                </Menu>
+                                
+                            </motion.div>
+                        )} 
+
+                        {isHovered && (  
+                        <motion.div className='absolute right-7 top-5 z-5' 
+                            whileHover={{
+                                scale: 1.3,
+                                transition: { duration: 0.2 }, // Smooth transition
                             }}
                         >
-                            <MenuHandler>
-                                <Button
-                                variant="text"
-                                className="text-base font-normal capitalize tracking-normal text-white p-0 bg-none"
-                                onClick={(e)=>e.stopPropagation()}
+                            {projectInfo?.star == 1 ?
+                                <span className='text-[16px] text-customYellow-100' 
+                                    onClick={(e)=>{e.stopPropagation(); handleFavProject(projectInfo)}}
                                 >
-                                    <HiDotsVertical />
-                                </Button>
-                            </MenuHandler>
-                            <MenuList className="hidden w-[32rem] grid-cols-7 gap-4 overflow-visible lg:grid -mt-1"
-                            onClick={(e)=>e.stopPropagation()}
-                            >
-                                <Card
-                                    className="col-span-3 flex h-full w-full items-center justify-center shadow-none"
+                                    <HiStar />
+                                </span>
+                                :
+                                <span className='text-[16px] text-white' 
+                                    onClick={(e)=>{e.stopPropagation(); handleFavProject(projectInfo)}}
                                 >
-                                    <Typography variant="h6" color="blue-gray" className="mb-1">Choose Color</Typography>
-                                    
-                                    <Wheel
-                                        // color={teamActionValue?.color}
-                                        // onChange={(e)=>handleChangeTeamAction(e)}
-                                        // onClick={(e)=>e.stopPropagation()}
-                                    />
-                                    
-                            
-                                </Card>
-                                 <ul className="col-span-4 flex w-full flex-col gap-2" onClick={(e)=>e.stopPropagation()}>
-                                    {projectActonList.map(({ title, icon, id, color }) => (
-                                        <MenuItem key={id}>
-                                        
-                                    
-                                            <div className='flex items-center justify-between'>
-                                                <Typography variant="h6" color="blue-gray" className="mb-1"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation(); // Prevent the event from bubbling up
-                                                        // handleTeamActionList(ele, id);
-                                                    }}
-                                                >
-                                                    {title}
-                                                </Typography>
-                                                <span className={`${color}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation(); // Prevent the event from bubbling up
-                                                        handleProjectActionList(projectInfo, id);
-                                                    }}
-                                                >{icon}</span>
-                                            </div>
-                                        </MenuItem>
-                                    ))}
-                                    
-                                    <div className='flex items-center justify-between'>
-                                        <Button  className='text-white' onClick={(e)=>{e.stopPropagation()}}
-                                            // loading={teamActionValue?.loadingState === "update-color"}
-                                            
-                                            >Update Color</Button>
-                                    </div>
-                                </ul> 
-                            </MenuList>
-                        </Menu>
-                        
-                    </motion.div>
-                )} 
+                                    <HiOutlineStar />
+                                </span>
+                            }
+                        </motion.div>
+                        )} 
+
                     </div>
                     <div className='flex-1 flex items-center justify-center text-white text-[16px]'>
                         <span>{projectInfo?.name}</span>

@@ -4,11 +4,15 @@ import { showToast } from "../../components/Toaster/Toaster"
 import { getRandomHexColor } from "../../services/__projectsServices";
 import useStore from "../../Store/Store";
 import { gettingValue } from "../../services/__gettingSelectValue";
+import { FaLessThan } from "react-icons/fa";
 
 const useAddProjectServices = ()=>{
 
 
     const addNewProject = useStore((state)=> state.addNewProject)
+    const deleteProject = useStore((state)=> state.deleteProject)
+    const closedProject = useStore((state)=> state.closedProject)
+    const favToggleProject = useStore((state)=> state.favToggleProject)
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -50,6 +54,15 @@ const useAddProjectServices = ()=>{
 
     })
 
+
+
+    const [projectActionValue, setProjectActionValue] = useState({
+      color:getRandomHexColor(),  
+      id:'',
+      loadingState:false,
+      closeProject:false, 
+      deleteProject:false
+    })
 
 
 
@@ -468,6 +481,12 @@ const useAddProjectServices = ()=>{
             case 1:
                 getSingleProjectData(data)
                 break;
+            case 2:
+                handleToggleCloseProject(data)
+                break
+            case 3:
+                handleToggleDeleteProject(data)
+                break;
         
             default:
                 break;
@@ -592,6 +611,180 @@ const useAddProjectServices = ()=>{
     }
 
 
+
+    
+
+
+    const handleChangeProjectAction = (e)=>{
+        if(!e.target){
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                color:e.hex
+            }))
+        }else{
+            const {name, value} = e.target
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                [name]: value
+            }))
+        }
+    }
+
+
+    const handleToggleDeleteProject=(data)=>{
+        if(projectActionValue.deleteProject){
+
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                id:'', 
+                deleteProject:false
+                
+            }))
+        }else{
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                id:data.id,
+                deleteProject:true
+            }))
+
+        }
+    }
+    const handleToggleCloseProject=(data)=>{
+        if(projectActionValue.closeProject){
+
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                id:'', 
+                closeProject:false
+                
+            }))
+        }else{
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                id:data.id,
+                closeProject:true
+            }))
+
+        }
+    }
+
+
+    const updateProjectColor = async(data)=>{
+        // const apiData = {
+        //     team_id: data.id,
+        //     color_code: teamActionValue.color
+        // }
+        // setTeamActionValue((prevState)=>({
+        //     ...prevState,
+        //     loadingState:'update-color'
+        // }))
+        // try {
+        //     const response = await teamsApi.updateTeamColor(apiData)
+        //     const responseData = response.data 
+        //     if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+        //         showToast('Team Color Updated Successfully', 'success')
+        //         updatingTeamColor(data.id, teamActionValue?.color)
+        //     }else{
+        //         const error  = responseData.ERROR_DESCRIPTION 
+        //         showToast(error, 'error')
+        //     }
+        //     console.log('response', response)            
+        // } catch (error) {
+        //     console.log(error)
+        // }finally{
+        //     setTeamActionValue((prevState)=>({
+        //         ...prevState,
+        //         loadingState:''
+        //     }))
+        // }
+    }
+
+
+
+
+    const handleConfirmDeleteProject = async()=>{
+        const apiData = {
+            id: projectActionValue.id
+        }
+        setProjectActionValue((prevState)=>({
+            ...prevState,
+            loadingState:true
+        }))
+        try {
+            const response = await projectsApi.deleteProject(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                showToast("Project deleted successfully", 'success')
+                deleteProject(projectActionValue.id)
+                handleToggleDeleteProject()
+            }
+        } catch (error) {
+            
+        }finally{
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                loadingState:false
+            }))
+        }
+
+        
+    }
+    const handleConfirmClosedProject = async()=>{
+        const apiData = {
+            id: projectActionValue.id
+        }
+        setProjectActionValue((prevState)=>({
+            ...prevState,
+            loadingState:true
+        }))
+        try {
+            const response = await projectsApi.closeProject(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                showToast("Project closed successfully", 'success')
+                closedProject(projectActionValue.id)
+                handleToggleCloseProject()
+            }
+        } catch (error) {
+            
+        }finally{
+            setProjectActionValue((prevState)=>({
+                ...prevState,
+                loadingState:false
+            }))
+        }
+
+
+    }
+
+
+
+    const handleFavProject = async(data)=>{
+        const apiData = {
+            id:data.id
+        }
+        try {
+            const response = await projectsApi.projectStarToggle(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                if(data.star == 1){
+                    favToggleProject(data.id, 0)
+                    showToast("Project remove from favourite", "success")
+                }else{
+                    favToggleProject(data.id, 1)
+                    showToast("Project add To favourite", "success")
+                }
+                
+            }
+        } catch (error) {
+            
+        }
+
+    }
+
+
+
+
     return {
         addProjectValue,handleAddProject,
         toggleAddProject,
@@ -610,7 +803,15 @@ const useAddProjectServices = ()=>{
         handleAddNewProject,
         handleProjectActionList,
         toggleEditProject,
-        handleUpdateProject
+        handleUpdateProject,
+        projectActionValue,
+        handleChangeProjectAction,
+        updateProjectColor,
+        handleToggleDeleteProject,
+        handleConfirmDeleteProject,
+        handleToggleCloseProject,
+        handleConfirmClosedProject,
+        handleFavProject
     }
 
 }

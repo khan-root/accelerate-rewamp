@@ -2,12 +2,22 @@ import React from 'react'
 import { inboxToggle } from '../../utils/milestonUtils'
 import { motion } from 'framer-motion'
 import {IoIosSend} from 'react-icons/io'
+import Discussion from './Discussion'
+import Starred from './Starred'
+import Activity from './Activity'
+import useInboxServices from '../../viewModel/milestoneViewModel/inboxServices'
+import { useParams } from 'react-router-dom'
 
 const Inbox = (props) => {
-    const { toggleInboxState, handleToggleInboxState } = props
-    console.log('toggleInboxState', toggleInboxState)
+    const { toggleInboxState, handleToggleInboxState,inboxData,starredData,activityData } = props
+
+    const params = useParams()
+
+
+    const {handleAddToStar,handleRemoveFromFav,sendMessageValue,handleChangeSendMessage,handleSendMessage} = useInboxServices(params.id)
+
   return (
-    <div className='h-[500px] w-full overflow-y-auto border border-red-600 flex flex-col'>
+    <div className='h-[500px] w-full overflow-y-auto flex flex-col rounded-lg border border-customGray-600 shadow-lg space-y-1'>
         <div className='flex items-center gap-4 py-3 bg-customBlue-600'>
 
             {inboxToggle.map((ele)=>(
@@ -32,26 +42,62 @@ const Inbox = (props) => {
                 </div>
             ))}
         </div>
-        <div className='flex-1 border border-yellow-900 overflow-y-auto'>
-            <span>
-                lorem10000
-            </span>
-        </div>
-        <div className='flex items-center gap-3'>
-            <div className='w-[80%]'>
-                <textarea 
-                    rows="4" 
-                    name="description"
-                    className='text-[#333333] text-[12px] rounded-md   py-[10px] px-[17px] border border-[#cccccc] outline-none resize-none w-full focus:border-customBlue-100'
-                    placeholder='Type your message here'
+        <div className='flex-1 overflow-y-auto space-y-4 pe-4 mt-2'>
+            {toggleInboxState?.state === 1 ? 
+                inboxData?.map((ele)=>(
+                    <Discussion 
+                        key={ele.id}
+                        data = {ele}
+                        handleAddToStar = {handleAddToStar}
+                        handleRemoveFromFav = {handleRemoveFromFav}
                     
-                >
-            </textarea>
-            </div>
-            <div className='flex items-center justify-center'>
-                <span className='h-10 w-10 flex items-center justify-center text-[20px] text-white rounded-full bg-customBlue-500'><IoIosSend /></span>
-            </div>
+                    />
+                ))
+            :
+            toggleInboxState?.state === 2 ? 
+                starredData?.map((ele)=>(
+                    <Starred 
+                        key={ele.id}
+                        data = {ele}
+                        handleRemoveFromFav = {handleRemoveFromFav}
+                    />
+                ))
+
+            :
+            toggleInboxState?.state === 3 ? 
+                activityData?.map((ele)=>(
+                    <Activity 
+                        key={ele.id}
+                        data = {ele}
+                    />
+                ))
+
+            :
+            null
+            }
+            
         </div>
+        {toggleInboxState?.state === 1 &&
+            <div className='flex items-center gap-3'>
+                <div className='w-[80%]'>
+                    <textarea 
+                        rows="4" 
+                        name="message"
+                        className='text-[#333333] text-[12px] rounded-md   py-[10px] px-[17px] border border-[#cccccc] outline-none resize-none w-full focus:border-customBlue-100'
+                        placeholder='Type your message here'
+                        onChange={handleChangeSendMessage}
+                        value={sendMessageValue?.message}
+                        
+                    >
+                </textarea>
+                </div>
+                <div className='flex items-center justify-center'>
+                    <span className='h-10 w-10 flex items-center justify-center text-[20px] text-white rounded-full bg-customBlue-500'
+                        onClick={handleSendMessage}
+                    ><IoIosSend /></span>
+                </div>
+            </div>
+        }
     </div>
   )
 }

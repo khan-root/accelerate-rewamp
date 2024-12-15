@@ -52,3 +52,24 @@ export const formatUnixToHTMLDateTime = (unixTimestamp) => {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
+
+
+
+
+export const YMDToday =(entryTime) =>{
+    const date = new Date(entryTime * 1000); // Convert to milliseconds
+    const today = new Date();
+
+    // Check if it is today
+    const isToday =
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+    if (isToday) {
+        return 'Today';
+    }
+
+    // Format as YYYY/MM/DD
+    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+}

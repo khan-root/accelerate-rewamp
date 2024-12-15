@@ -16,6 +16,6 @@ export const viewTeamDataToggle = [
 
 
 export const teamActonList = [
-    {id:1, title:'Edit Project', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
+    {id:1, title:'Edit Team', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
     {id:2, title:'Delete Team', icon:<HiMiniTrash />, color:'text-red-600'}
 ]

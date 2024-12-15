@@ -13,7 +13,9 @@ import ConfirmationDialog from '../../components/ConfirmationDialog'
 import EditTeam from './EditTeam'
 const Teams = () => {
 
-  const {gettingAllTeams, allTeams,handleViewTeam, toggleViewTeam, viewTeamValue} = useTeamsServices()
+  const {gettingAllTeams, allTeams,handleViewTeam, toggleViewTeam, viewTeamValue,
+    addNewMember, handleInviteMember,handleBulkEmailInvite ,handleRemoveEmailInvite,handleNewMember
+  } = useTeamsServices()
 
 
   const {teamActionValue,handleChangeTeamAction,updateTeamColor,handleTeamActionList,
@@ -88,6 +90,12 @@ const Teams = () => {
           compo = {
             <ViewTeam 
               viewTeamValue = {viewTeamValue}
+              addNewMember = {addNewMember}
+              handleInviteMember = {handleInviteMember}
+              handleBulkEmailInvite = {handleBulkEmailInvite}
+              handleRemoveEmailInvite = {handleRemoveEmailInvite}
+              handleNewMember = {handleNewMember}
+              
             />
           }
           outsidePress = {false}

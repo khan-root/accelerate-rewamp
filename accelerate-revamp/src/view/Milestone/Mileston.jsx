@@ -31,10 +31,7 @@ const Mileston = () => {
     } = useMilestoneServices()
 
 
-    useEffect(()=>{
-        const id = params.id
-        gettingMileStones(id)
-    },[])
+    
 
 
 
@@ -42,6 +39,9 @@ const Mileston = () => {
     const taskDetails = milstones?.task_detail
     const employeeDetails = milstones?.employees_detail
     const taskMilestones = milstones?.task_milestones
+
+
+    console.log('milstones',milstones)
 
 
     const {addMilestoneValue, toggleAddMilestone,addMoreMileStoneHandler,removeMilestoneHandler,multipleMSChangeHandler,
@@ -58,7 +58,13 @@ const Mileston = () => {
 
     const { addMemberToTask, toggleAddMemmberToTask,handleSelectAddMemberToTask, removeTaskMemeberLsit, handleAddMemberToTask} = useAddUserTaskMileston(params.id, employeeDetails)
 
-    const {toggleInboxState, handleToggleInboxState} = useInboxServices(params.id)
+    const {toggleInboxState, handleToggleInboxState,gettingDiscussion,inboxData, starredData,activityData} = useInboxServices(params.id)
+
+    useEffect(()=>{
+        const id = params.id
+        gettingMileStones(id)
+        gettingDiscussion(id)
+    },[])
 
   return (
     <>
@@ -155,7 +161,7 @@ const Mileston = () => {
                     <div className='sticky top-1 z-10 bg-white'>
                         <div className='flex items-center justify-evenly border border-customGray-400 rounded-xl py-3'>
                             <div className="flex flex-col items-center gap-4">
-                                <span>Milestones</span>
+                                <span className='text-[12px]'>{taskMilestones?.length} Milestones</span>
                                 <div 
                                     style={{
                                         width: 90,
@@ -169,11 +175,11 @@ const Mileston = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center">
-                                <span>Progress</span>
+                                <span className='text-[12px]'>Progress</span>
                                 <CircularProgress percentage={10} color="#3BE8B0"/>
                             </div>
                             <div className="flex flex-col items-center">
-                                <span>Deadline</span>
+                                <span className='text-[12px]'>Deadline</span>
                                 <CircularProgress percentage={50} color="#FF8A9F"/>
                             </div>
                         </div>
@@ -203,10 +209,13 @@ const Mileston = () => {
                 
                 
             </div>
-            <div className='col-span-3 border border-black h-[calc(100vh-140px)] flex items-end sticky top-5'>
+            <div className='col-span-3 h-[calc(100vh-140px)] flex items-end sticky top-5'>
                 <Inbox 
                     toggleInboxState ={toggleInboxState} 
                     handleToggleInboxState = {handleToggleInboxState}
+                    inboxData = {inboxData}
+                    starredData = {starredData}
+                    activityData = {activityData}
                 />      
             </div>
         </div>

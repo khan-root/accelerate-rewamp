@@ -17,6 +17,7 @@ const projectsServices = (set, get)=>({
     fetchProjects :async(apiData)=>{
         try {
             const response = await projectsApi.getProjects(apiData)
+            console.log('******response', response)
             const responseData = response.data 
             if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
                 const dbData = responseData.DB_DATA 
@@ -52,13 +53,6 @@ const projectsServices = (set, get)=>({
 
     settingNewTask:(data, phase)=>{
 
-        // console.log(data, phase)
-        // console.log('*****', get().projectTasksData.project_tasks)
-        // const tasks =  get().projectTasksData.project_tasks
-        // const updateTask = tasks.find((ele)=> ele.position == phase)
-        // const newTasks = [data, ...updateTask.tasks]
-        // console.log(newTasks)
-
         set((state) => ({
             projectTasksData: {
                 ...state.projectTasksData, // Preserve other properties
@@ -77,18 +71,69 @@ const projectsServices = (set, get)=>({
     addNewProject: (data)=>{
 
         set((state) => ({
-        projects: {
-            ...state.projects, // Preserve all properties in `projects`
-            projects_details: {
-                ...state.projects.projects_details, // Preserve all properties in `projects_details`
-                data: [
-                    ...state.projects.projects_details.data, // Copy existing `data` array
-                    data, // Add the new project to the array
-                ],
+            projects: {
+                ...state.projects, // Preserve all properties in `projects`
+                projects_details: {
+                    ...state.projects.projects_details, // Preserve all properties in `projects_details`
+                    data: [
+                        ...state.projects.projects_details.data, // Copy existing `data` array
+                        data, // Add the new project to the array
+                    ],
+                },
             },
-        },
-    }));
-    }
+        }));
+    },
+    deleteProject: (id)=>{
+
+        set((state) => ({
+            projects: {
+                ...state.projects, // Preserve all properties in `projects`
+                projects_details: {
+                    ...state.projects.projects_details, // Preserve all properties in `projects_details`
+                    data: 
+                        state.projects.projects_details.data?.filter((ele)=> ele.id !== id)
+                        
+                    
+                },
+            },
+        }));
+    },
+    closedProject: (id)=>{
+        console.log('id', id)
+
+        set((state) => ({
+            projects: {
+                ...state.projects, // Preserve all properties in `projects`
+                projects_details: {
+                    ...state.projects.projects_details, // Preserve all properties in `projects_details`
+                    data: 
+                        state.projects.projects_details.data?.filter((ele)=> ele.id !== id)
+                        
+                    
+                },
+            },
+        }));
+    },
+    favToggleProject: (id, fav)=>{
+        set((state) => ({
+            projects: {
+                ...state.projects, // Preserve all properties in `projects`
+                projects_details: {
+                    ...state.projects.projects_details, // Preserve all properties in `projects_details`
+                    data: 
+                        state.projects.projects_details.data?.map((ele)=> ele.id === id ? {...ele, star:fav } : ele)  
+                },
+            },
+            projectTasksData:{
+                ...state.projectTasksData,
+                project_info: {
+                    ...state.projectTasksData?.project_info,
+                    star: fav, // Replace 'newStarValue' with the updated value
+                },
+            }
+        }));
+    },
+    
 
 })
 

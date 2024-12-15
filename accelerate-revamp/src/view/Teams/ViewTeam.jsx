@@ -8,12 +8,14 @@ import CustomButton from '../../components/CustomButton'
 
 
 const ViewTeam = (props) => {
-    const {viewTeamValue} = props 
+    const {viewTeamValue, addNewMember, handleInviteMember,handleBulkEmailInvite ,handleRemoveEmailInvite,handleNewMember} = props 
     const teamInfo = viewTeamValue?.teamInfo
     const members = viewTeamValue?.data?.accepted
     const pending = viewTeamValue?.data?.pending
-    const oneid = "10268458"
+    const oneid = "10464716"
     const {tabToggleState, currentState} = useTabToggle()
+
+    console.log('teamInfo', teamInfo)
   return (
     <div className='space-y-6'>
         <div className='flex items-center gap-4'>
@@ -57,7 +59,7 @@ const ViewTeam = (props) => {
                     
                     pending?.map((ele, i)=>(
                         <div key={i} className='flex items-center gap-3'>
-                            <img src='' alt='test'  />
+                            {/* <img src='' alt='test'  /> */}
                             <span>{ele?.full_name}</span>
                         </div>
                     ))
@@ -81,32 +83,33 @@ const ViewTeam = (props) => {
                             <input 
                                 className='w-full text-[#333333] text-[15px] py-[4px] px-[10px] border-b border-b-gray-500 outline-none focus:border-b-customBlue-100'
                                 type='text' 
-                                // value={createTeamValue.email}
+                                value={addNewMember.email}
                                 name='email' 
-                                // onChange={handleChangeTeam}
+                                onChange={handleInviteMember}
                                 placeholder='xyz@gmail.com'
-                                // onKeyPress={handleBulkEmail}
+                                onKeyPress={handleBulkEmailInvite}
                             />
                         </div>
 
                         <div className='flex items-center gap-2 flex-wrap'>
-                            {/* {createTeamValue?.emailList?.map((ele, i)=>(
+                            {addNewMember?.emailList?.map((ele, i)=>(
                                 <div key={i} className='flex items-center justify-between gap-2 bg-customBlue-100 rounded-full p-2'>
                                     <span className='text-white text-[13px]'>{ele}</span>
                                     <span className='h-5 w-5 flex items-center justify-center text-white bg-red-600 rounded-full'
-                                        // onClick={()=>handleRemoveEmail(i)}
+                                        onClick={()=>handleRemoveEmailInvite(i)}
                                     ><FaXmark /></span>
                                 </div>
-                            )) */}
+                            ))}
 
-                            {/* } */}
-
+                            
                         </div>
 
                     </div>
                     <div>
                         <CustomButton 
                             title="Add / Invite"
+                            onClick={()=>handleNewMember(teamInfo.id)}
+                            loading={addNewMember.loading}
                         />
                     </div>
                 </div>

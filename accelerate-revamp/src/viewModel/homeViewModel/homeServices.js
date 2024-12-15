@@ -6,7 +6,7 @@ import { DDY, DMYT } from "../../services/__dateTimeServices";
 const useHomeServices = ()=>{
 
     const getInComingTasks = useStore((state)=> state.getInComingTasks)
-    const inComingTasks = useStore((state)=> state.inComingTasks)
+    // const inComingTasks = useStore((state)=> state.inComingTasks)
     const gettingHomeTask = useStore((state)=> state.gettingHomeTask)
     const homeTaskData = useStore((state)=> state.homeTaskData)
 
@@ -41,21 +41,47 @@ const useHomeServices = ()=>{
 
 
 
+    
+
+
     useEffect(()=>{
 
         if(toggleValue.main === 1){
             setCalendarData((prevState)=>({
                 ...prevState,
-                daysAttr:calendarTasks?.incoming
+                daysAttr:calendarTasks?.incoming,
             }))
+            
         }else{
             setCalendarData((prevState)=>({
                 ...prevState,
-                daysAttr:calendarTasks?.outgoing
+                daysAttr:calendarTasks?.outgoing,
+            }))
+            
+            
+        }
+    },[homeTaskData])
+
+    useEffect(()=>{
+
+
+        console.log('categoryTasks', toggleValue)
+
+        if(toggleValue.main === 1){
+          
+            setToggleValue((prevState)=>({
+                ...prevState,
+                taskData:categoryTasks?.incoming_due
+            }))
+        }else{
+            
+            setToggleValue((prevState)=>({
+                ...prevState,
+                taskData:categoryTasks?.outgoing_due
             }))
             
         }
-    },[calendarTasks])
+    },[])
 
 
    
@@ -213,6 +239,62 @@ const useHomeServices = ()=>{
     }
 
 
+    const handlePreviousMonth = () => {
+        const currentMonth = calendarData.month.value - 1; // Month index (0-11)
+        const currentYear = calendarData.year.value;
+
+        // Create a new Date object to handle month/year calculation
+        const prevMonthDate = new Date(currentYear, currentMonth - 1); // Move to previous month
+        
+        const newMonth = prevMonthDate.getMonth(); // Get the previous month index (0-11)
+        const newYear = prevMonthDate.getFullYear(); // Get the updated year if necessary
+
+        // Get the updated month object (assuming `getAllMonths()` is the function that returns month info)
+        const updatedMonth = months.find((m) => m.id === newMonth + 1); // +1 to make it 1-based (1 for January)
+        
+        setCalendarData((prevState) => ({
+            ...prevState,
+            month: { value: newMonth + 1, label: updatedMonth.title }, // Update month (1-based index)
+            year: { value: newYear, label: newYear }, // Update year if necessary
+            daysArray:generateDays(newYear, newMonth)
+        }));
+        const apiData = {
+            filter: `${updatedMonth?.id}-${newYear}`
+        }
+        gettingHomeTask(apiData)
+        
+    };
+
+
+    const handleNextMonth = () => {
+        const currentMonth = calendarData.month.value - 1; // Month index (0-11)
+        const currentYear = calendarData.year.value;
+        
+        // Create a new Date object to handle month/year calculation
+        const nextMonthDate = new Date(currentYear, currentMonth + 1); // Move to next month
+        
+        const newMonth = nextMonthDate.getMonth(); // Get the next month index (0-11)
+        const newYear = nextMonthDate.getFullYear(); // Get the updated year if necessary
+
+        // Get the updated month object (assuming `getAllMonths()` is the function that returns month info)
+        const updatedMonth = months.find((m) => m.id === newMonth + 1); // +1 to make it 1-based (1 for January)
+
+        setCalendarData((prevState) => ({
+            ...prevState,
+            month: { value: newMonth + 1, label: updatedMonth.title }, // Update month (1-based index)
+            year: { value: newYear, label: newYear }, // Update year if necessary
+            daysArray:generateDays(newYear, newMonth)
+        }));
+
+        const apiData = {
+            filter: `${updatedMonth?.id}-${newYear}`
+        }
+        gettingHomeTask(apiData)
+        
+
+    };
+
+
 
 
 
@@ -223,7 +305,9 @@ const useHomeServices = ()=>{
         gettingHomeTask,
         getCalendarTasksLabel,
         toggleState,
-        toggleValue
+        toggleValue,
+        handlePreviousMonth,
+        handleNextMonth
     }
 
 

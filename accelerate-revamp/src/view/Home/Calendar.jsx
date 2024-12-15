@@ -8,7 +8,9 @@ import { hexToRGBA, titleNameAlpha } from '../../services/__colorServices';
 
 const Calendar = (props) => {
     const {tabToggleState, currentState,} = useTabToggle()
-    const { calendarData, getCalendarTaskLabel, getCalendarTasks,getCalendarTasksLabel} = props;
+    const { calendarData, getCalendarTaskLabel, getCalendarTasks,getCalendarTasksLabel,
+        handlePreviousMonth,handleNextMonth
+    } = props;
     const today = new Date(); // Current date
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -19,6 +21,7 @@ const Calendar = (props) => {
 
 
     const [hoveredDay, setHoveredDay] = useState(null);
+    const currentDate = calendarData?.currentDate
 
     return (
         <div className="w-full">
@@ -27,18 +30,20 @@ const Calendar = (props) => {
                     <motion.button
                         whileHover={{ scale: 1.2 }}
                         className="w-10 h-10 flex items-center justify-center border border-customBlack-100 rounded-full hover:bg-customGray-400 hover:text-customGray-300"
+                        onClick={()=>handlePreviousMonth(currentDate, currentDate?.year?.label)}
                     >
                         <FaChevronLeft />
                     </motion.button>
                         <motion.button
                         whileHover={{ scale: 1.2 }}
                         className="w-10 h-10 flex items-center justify-center border border-customGray-300 rounded-full hover:bg-customGray-400 hover:text-customGray-300"
+                         onClick={handleNextMonth}
                     >
                         <FaChevronRight />
                     </motion.button>
                 </div>
                 
-                <div className="text-xl text-customGray-400 font-bold flex flex-col items-center">
+                <div className="text-xl text-customBlack-200 font-bold flex flex-col items-center">
                     <span>{calendarData?.month.label}</span>
                     <span className="font-normal">{calendarData.year.label}</span>
                 </div>
@@ -72,7 +77,7 @@ const Calendar = (props) => {
                 {daysOfWeek.map((day) => (
                     <div
                         key={day}
-                        className="text-md text-customGray-400 font-normal w-full h-full flex items-center justify-center"
+                        className="text-md text-customBlack-200 font-normal w-full h-full flex items-center justify-center"
                     >
                         {day}
                     </div>
@@ -86,7 +91,7 @@ const Calendar = (props) => {
                 const rgbaColor = hexToRGBA(colors?.bgColor, 0.2); // 50% opacity
                 const taskCount = getCalendarTasks(day, calendarData.month.value - 1, calendarData.year.value);
                 const isWeekend = getDayOfWeek(day) === 0 || getDayOfWeek(day) === 6;
-                console.log('colors',colors)
+
 
 
                 return day ? (

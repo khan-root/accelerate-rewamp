@@ -1,9 +1,12 @@
+import milestonApi from "../../Model/Milestone/Mileston"
 import taskApi from "../../Model/Task/Task"
 
 const milestonServices = (set, get)=>({
 
     milstones:{},
-
+    inboxData:[],
+    starredData: [],
+    activityData:[],
 
 
     gettingMileStones:async(id)=>{
@@ -27,7 +30,6 @@ const milestonServices = (set, get)=>({
 
     updateRating:(id, rating)=>{
         const milestones = get().milstones
-        console.log('milestones', milestones)
 
     },
 
@@ -114,8 +116,87 @@ const milestonServices = (set, get)=>({
                 employees_detail: [...data, ...state.milstones.employees_detail]
             },
         }));
-    }
+    },
 
+    gettingDiscussion:async(id)=>{
+        const apiData = {
+            task_id:id,
+            chat_id:0
+        }
+        try {
+
+            const response = await milestonApi.getDiscussion(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA 
+                set({
+                    inboxData: dbData
+                })
+            }
+            
+        } catch (error) {
+            
+        }
+    },
+    gettingStarred:async(id)=>{
+        const apiData = {
+            task_id:id,
+            is_notice:'notice',
+            chat_id:0,
+        }
+        try {
+
+            const response = await milestonApi.getStarred(apiData)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA 
+                set({
+                    starredData: dbData
+                })
+            }
+            
+        } catch (error) {
+            
+        }
+    },
+    gettingActivity:async(id)=>{
+        const apiData = {
+            task_id:id,
+        }
+        try {
+
+            const response = await milestonApi.getActivity(apiData)
+            console.log('response', response)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA 
+                set({
+                    activityData: dbData
+                })
+            }
+            
+        } catch (error) {
+            
+        }
+    },
+    addingChatToFav:(id)=>{
+        set({
+            inboxData: get().inboxData?.map((ele)=> ele.id === id ? {...ele, is_notice:"1" } : ele)
+        })
+    },
+    removeFromFav:(id)=>{
+        set({
+            inboxData: get().inboxData?.map((ele)=> ele.id === id ? {...ele, is_notice: "0" } : ele)
+        })
+    },
+    removeFavFromList:(id)=>{
+        set({
+            starredData: get().starredData?.filter((ele)=> ele.id !== id)
+        })
+    },
+    addNewChat:(data)=>{
+        set({inboxData: [...new Set([...get().inboxData, {...data, is_notice:'0', name:'Me'}])]})
+    }
     
 
 

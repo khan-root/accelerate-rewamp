@@ -82,6 +82,37 @@ const projectsApi = {
             }
         })
     },
+    deleteProject:function(data){
+       return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'delete_project',
+                ...data
+            }
+        })
+    },
+    closeProject:function(data){
+       return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'project_close',
+                ...data
+            }
+        })
+    },
+    projectStarToggle:function(data){
+       return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'star_project',
+                ...data
+            }
+        })
+    },
+    
     
 }
 

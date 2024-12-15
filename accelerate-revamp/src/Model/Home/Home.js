@@ -10,15 +10,27 @@ const homeApi = {
             }
         })
     },
-    homeTask:function(){
+    homeTask:function(data){
         return axiosInstance.request({
             method:"GET",
             url:'/get_data.php',
             params:{
-                'operation': 'tasks' 
+                'operation': 'tasks' ,
+                ...data
             }
         })
     },
+    
+    getNotifications:function(){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation': 'get_notifications_v2' 
+            }
+        })
+    },
+
 }
 
 

@@ -1,5 +1,5 @@
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Navbar, Typography } from '@material-tailwind/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import logo from "../assets/images/accelerateLogo.png"
 import { headerData } from '../utils/headerUtils'
 import { motion } from 'framer-motion'
@@ -8,10 +8,16 @@ import { NavLink, useLocation} from 'react-router-dom'
 import { IoMailOutline } from 'react-icons/io5'
 import { GoBell } from 'react-icons/go'
 import useHeaderServices from '../services/__headerServices'
+import { YMDToday } from '../services/__dateTimeServices'
 
 const CustomNavbar = () => {
     const location = useLocation()
-    const {backToHome, handleNavigation} = useHeaderServices()
+    const {backToHome, handleNavigation,gettingNotifications,notificationData} = useHeaderServices()
+
+    useEffect(()=>{
+        gettingNotifications()
+    },[])
+
   return (
     <Navbar className='sticky top-0 z-10 h-max max-w-full !bg-transparent rounded-none px-4 py-2 lg:px-8 lg:py-2 text-blue-gray-900'>
         <div className='flex items-center justify-between'>
@@ -53,12 +59,47 @@ const CustomNavbar = () => {
             </div>
             <div className='flex items-center gap-4'>
                 <div className='flex items-center gap-5'>
-                    <span className='text-[20px] text-customBlack-200'>
-                        <IoMailOutline />
-                    </span>
-                    <span className='text-[20px] text-customBlack-200'>
-                        <GoBell />
-                    </span>
+                    
+                    {/* <Menu>
+                        <MenuHandler>
+                            <span className='text-[20px] text-customBlack-200 cursor-pointer'>
+                                <IoMailOutline />
+                            </span>
+                        </MenuHandler>
+                        <MenuList className='p-0 h-fit max-h-[70%] overflow-y-auto'>
+                            {notificationData?.map((ele)=>(
+
+                                <MenuItem key={ele._id}>
+                                  <div>
+                                    <div>
+
+                                    </div>
+                                    <div className='space-y-2'>
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: ele?.notification }}
+                                            className="text-customBlack-400 text-[13px] font-poppins"
+                                        >
+                                        <span className='text-[12px]'>{YMDToday(ele?.entry_time)}</span>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Menu> */}
+                    <Menu>
+                        <MenuHandler>
+                            <span className='text-[20px] text-customBlack-200 cursor-pointer'>
+                                <GoBell />
+                            </span>
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem>
+                                232323
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+                    
                 </div>
                
                 <Menu>

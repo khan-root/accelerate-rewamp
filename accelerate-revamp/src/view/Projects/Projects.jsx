@@ -12,6 +12,7 @@ import CustomDrawer from '../../components/CustomDrawer'
 import AddProject from './AddProject'
 import useProjectDetailsServices from '../../viewModel/projectsViewModel/projectDetailsServices'
 import { Outlet, useParams } from 'react-router-dom'
+import ConfirmationDialog from '../../components/ConfirmationDialog'
 
 const Projects = () => {
   const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
@@ -20,7 +21,16 @@ const Projects = () => {
     handleChangeAddProject,addExtraPhase,removePhase,
     addWorkFlow,addOwner,handleSelectAddProject,
     handleSelectTemplate,handleColorPickerToggle,pickerRef,
-    handleAddNewProject
+    handleAddNewProject,projectActionValue,
+    handleChangeProjectAction,
+    updateProjectColor,
+    handleProjectActionList,
+    toggleEditProject , handleUpdateProject,
+    handleToggleDeleteProject,
+    handleConfirmDeleteProject,
+    handleToggleCloseProject,
+    handleConfirmClosedProject,
+    handleFavProject
    } = useAddProjectServices()
 
    const {projectDetails} = useProjectDetailsServices()
@@ -134,6 +144,11 @@ const Projects = () => {
                 key={ele?.id}
                 ele = {ele}
                 projectDetails= {projectDetails}
+                projectActionValue= {projectActionValue}
+                handleChangeProjectAction= {handleChangeProjectAction}
+                updateProjectColor= {updateProjectColor}
+                handleProjectActionList= {handleProjectActionList}
+                handleFavProject= {handleFavProject}
               />
             ))}
         </div>
@@ -165,6 +180,72 @@ const Projects = () => {
           }
           title="Create Project"
           widthSize = {1150}
+        />
+      }
+
+      {addProjectValue.update &&
+        <CustomDrawer 
+          open = {addProjectValue.update}
+          closeDrawer = {toggleEditProject}
+          compo ={
+            <AddProject 
+              handleUpdateProject = {handleUpdateProject}
+              handleAddOwnerToggle = {handleAddOwnerToggle}
+              handleChangeAddProject = {handleChangeAddProject}
+              addOwner = {addOwner}
+              handleSelectAddProject = {handleSelectAddProject}
+              handleColorPickerToggle = {handleColorPickerToggle}
+              pickerRef = {pickerRef}
+              addProjectValue = {addProjectValue}
+
+
+            />
+          }
+          title="Update Project"
+          widthSize = {1150}
+        />
+      }
+      {(projectActionValue?.deleteProject || projectActionValue.closeProject ) &&
+        <ConfirmationDialog 
+          openDialog={
+            projectActionValue?.deleteProject ?
+            projectActionValue?.deleteProject :
+            projectActionValue?.closeProject ?
+            projectActionValue?.closeProject :
+            null
+
+          }
+          handleOpen={
+            projectActionValue?.deleteProject ?
+            handleToggleDeleteProject :
+            projectActionValue?.closeProject ?
+            handleToggleCloseProject :
+            null
+            
+          }
+          title={
+              projectActionValue?.deleteProject ?
+              "Delete Project" :
+              projectActionValue?.closeProject ?
+              "Close Project" :
+              null
+          }
+          message={
+              projectActionValue?.deleteProject ?
+              "Are you sure you want to delete this project ?" :
+              projectActionValue?.closeProject ?
+              "Are you sure you want to close this project ?" :
+              null
+          }
+          handleConfirm= {
+            projectActionValue?.deleteProject ?
+            handleConfirmDeleteProject :
+            projectActionValue?.closeProject ?
+            handleConfirmClosedProject :
+            null
+            
+          }
+          loading={projectActionValue.loadingState}
         />
       }
       </>

@@ -12,14 +12,17 @@ import { DDY } from '../../services/__dateTimeServices'
 const Home = () => {
 
     const {calendarData,getInComingTasks, getCalendarTaskLabel,getCalendarTasks,gettingHomeTask,getCalendarTasksLabel,
-        toggleState, toggleValue
+        toggleState, toggleValue,handlePreviousMonth,handleNextMonth
     } = useHomeServices()
 
     useEffect(()=>{
         gettingHomeTask()
     },[])
 
-    // console.log('toggleState', toggleValue.taskData)
+
+
+
+    console.log('toggleState', toggleValue.taskData)
   return (
     <div className='px-10 py-5 space-y-6'>
         <div className='text-[20px] text-customBlack-300'>
@@ -117,6 +120,8 @@ const Home = () => {
                 getCalendarTaskLabel = {getCalendarTaskLabel}
                 getCalendarTasks = {getCalendarTasks}
                 getCalendarTasksLabel = {getCalendarTasksLabel}
+                handlePreviousMonth = {handlePreviousMonth}
+                handleNextMonth = {handleNextMonth}
             />
         </div>
     </div>

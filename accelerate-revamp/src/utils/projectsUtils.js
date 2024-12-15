@@ -1,4 +1,4 @@
-import { FaStar } from "react-icons/fa6"
+import { FaStar, FaXmark } from "react-icons/fa6"
 import { HiMiniTrash } from "react-icons/hi2"
 import { MdModeEdit } from "react-icons/md"
 
@@ -63,4 +63,13 @@ export const taskPrioriyCustomData = [
 export const taskTypeCustomData = [
     {id:1, title:'Indoor', value:"0"},
     {id:2, title:'Field', value:""},
+]
+
+
+
+
+export const projectMainAction = [
+    {id:1, title:'Edit Project', icon:<MdModeEdit />, color:'text-[#3da5f4]'},
+    {id:2, title:'Close Project', icon:<FaXmark />, color:'text-red-600'},
+    {id:3, title:'Delete Project', icon:<HiMiniTrash />, color:'text-red-600'}
 ]

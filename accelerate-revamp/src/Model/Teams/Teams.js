@@ -40,6 +40,16 @@ const teamsApi = {
             }
         })
     },
+    inviteMember:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            data:{
+                'operation':'add_invite_more',
+                ...data
+            }
+        })
+    },
     deleteTeam:function(data){
         return axiosInstance.request({
             method:"DELETE",

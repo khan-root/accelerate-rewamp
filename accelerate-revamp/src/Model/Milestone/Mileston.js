@@ -84,6 +84,71 @@ const milestonApi = {
         })
     },
 
+    getDiscussion:function(data){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_comments',
+                ...data
+            }
+        })
+    },
+    getStarred:function(data){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_comments',
+                ...data
+            }
+        })
+    },
+    getActivity:function(data){
+        return axiosInstance.request({
+            method:"GET",
+            url:'/get_data.php',
+            params:{
+                'operation':'get_task_activity',
+                ...data
+            }
+        })
+    },
+    
+    addToStar:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'star_it',
+                ...data
+            }
+        })
+    },
+    removedStar:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'star_it',
+                ...data
+            }
+        })
+    },
+    addDiscussion:function(data){
+        return axiosInstance.request({
+            method:"POST",
+            url:'/set_data.php',
+            params:{
+                'operation':'send_message',
+                ...data
+            }
+        })
+    },
+
+    
+
+
     
 
 
