@@ -21,6 +21,7 @@ import CustomDialog from '../../components/CustomDialog'
 import AddMemberMileston from './AddMemberMileston'
 import Inbox from './Inbox'
 import useInboxServices from '../../viewModel/milestoneViewModel/inboxServices'
+import deadlineGif from '../../assets/images/deadline.gif'
 
 const Mileston = () => {
 
@@ -39,9 +40,6 @@ const Mileston = () => {
     const taskDetails = milstones?.task_detail
     const employeeDetails = milstones?.employees_detail
     const taskMilestones = milstones?.task_milestones
-
-
-    console.log('milstones',milstones)
 
 
     const {addMilestoneValue, toggleAddMilestone,addMoreMileStoneHandler,removeMilestoneHandler,multipleMSChangeHandler,
@@ -176,12 +174,30 @@ const Mileston = () => {
                             </div>
                             <div className="flex flex-col items-center">
                                 <span className='text-[12px]'>Progress</span>
-                                <CircularProgress percentage={10} color="#3BE8B0"/>
+                                
+                                
+                                <CircularProgress percentage={milstones?.task_progress} color="#3BE8B0"/>
                             </div>
                             <div className="flex flex-col items-center">
                                 <span className='text-[12px]'>Deadline</span>
-                                <CircularProgress percentage={50} color="#FF8A9F"/>
+                                <CircularProgress percentage={milstones?.deadline_percentage} color="#FF8A9F"/>
                             </div>
+                            {milstones?.task_overdue &&
+                                <div className="flex flex-col items-center gap-4">
+                                    <span className='text-[12px]'>{taskMilestones?.length} Overdue</span>
+                                    <div 
+                                        style={{
+                                            width: 90,
+                                            height: 90,
+                                            position: "relative",
+
+                                        }}
+                                        className='border-[5px] border-customRed-100 rounded-full flex items-center justify-center'
+                                    >
+                                    <img src={deadlineGif}  alt='deadline' className='w-[50px] object-contain'/>
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <Typography variant='h5' className='text-customBlack-400'>Milestones</Typography>
                     </div>

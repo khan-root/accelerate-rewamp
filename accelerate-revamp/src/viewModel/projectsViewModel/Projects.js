@@ -12,12 +12,13 @@ const projectsServices = (set, get)=>({
 
     projects:[],
     projectTasksData:{},
+    projectLoading:false,
 
 
     fetchProjects :async(apiData)=>{
+        
         try {
             const response = await projectsApi.getProjects(apiData)
-            console.log('******response', response)
             const responseData = response.data 
             if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
                 const dbData = responseData.DB_DATA 
@@ -25,10 +26,14 @@ const projectsServices = (set, get)=>({
             }
         } catch (error) {
             
+        }finally{
+            set({projectLoading:false})
+
         }
     },
     gettingProjects: debounce(async (apiData) => {
-        const fetchProjects = get().fetchProjects;
+        set({projectLoading:true})
+        const fetchProjects = get().fetchProjects
         await fetchProjects(apiData);
     }, 500),
 

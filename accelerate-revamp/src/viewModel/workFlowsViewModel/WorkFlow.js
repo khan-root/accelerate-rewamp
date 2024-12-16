@@ -3,8 +3,10 @@ import workflowsApi from "../../Model/WorkFlows/WorkFlows"
 const workFlowsServices = (set, get)=>({
 
     workFlows:[],
+    workflowLoading:false, 
 
     gettingWorkFlows:async()=>{
+        set({workflowLoading:true})
         try{
             const resposne = await workflowsApi.getAllWorkFlows()
             const responseData = resposne.data 
@@ -14,6 +16,9 @@ const workFlowsServices = (set, get)=>({
             console.log('response', resposne)
         }catch(err){
             console.log('err', err)
+        }finally{
+            set({workflowLoading:false})
+
         }
     }
 

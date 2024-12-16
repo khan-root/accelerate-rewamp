@@ -6,9 +6,10 @@ import { DDY, DMYT } from "../../services/__dateTimeServices";
 const useHomeServices = ()=>{
 
     const getInComingTasks = useStore((state)=> state.getInComingTasks)
-    // const inComingTasks = useStore((state)=> state.inComingTasks)
+    const homeLoading = useStore((state)=> state.homeLoading)
     const gettingHomeTask = useStore((state)=> state.gettingHomeTask)
     const homeTaskData = useStore((state)=> state.homeTaskData)
+    const gettingHomeTaskByMont = useStore((state)=> state.gettingHomeTaskByMont)
 
 
     const calendarTasks = homeTaskData?.calender_tasks
@@ -261,7 +262,7 @@ const useHomeServices = ()=>{
         const apiData = {
             filter: `${updatedMonth?.id}-${newYear}`
         }
-        gettingHomeTask(apiData)
+        gettingHomeTaskByMont(apiData)
         
     };
 
@@ -289,7 +290,7 @@ const useHomeServices = ()=>{
         const apiData = {
             filter: `${updatedMonth?.id}-${newYear}`
         }
-        gettingHomeTask(apiData)
+        gettingHomeTaskByMont(apiData)
         
 
     };
@@ -307,7 +308,8 @@ const useHomeServices = ()=>{
         toggleState,
         toggleValue,
         handlePreviousMonth,
-        handleNextMonth
+        handleNextMonth,
+        homeLoading
     }
 
 

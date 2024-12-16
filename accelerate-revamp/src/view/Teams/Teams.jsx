@@ -11,10 +11,11 @@ import CustomDialog from '../../components/CustomDialog'
 import ViewTeam from './ViewTeam'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import EditTeam from './EditTeam'
+import TeamSkeleton from '../../Skeleton/TeamSkeleton'
 const Teams = () => {
 
   const {gettingAllTeams, allTeams,handleViewTeam, toggleViewTeam, viewTeamValue,
-    addNewMember, handleInviteMember,handleBulkEmailInvite ,handleRemoveEmailInvite,handleNewMember
+    addNewMember, handleInviteMember,handleBulkEmailInvite ,handleRemoveEmailInvite,handleNewMember,teamLoading
   } = useTeamsServices()
 
 
@@ -34,37 +35,42 @@ const Teams = () => {
   
 
   return (
-    <>
-      <div className='px-10 py-5 space-y-6 '>
-        <div className='text-[20px] text-customBlack-300'>
-          <span>Teams</span>
+    <> 
+      {teamLoading? 
+        <TeamSkeleton />
+        :
+      
+        <div className='px-10 py-5 space-y-6 '>
+          <div className='text-[20px] text-customBlack-300'>
+            <span>Teams</span>
+          </div>
+
+          <div className='grid grid-cols-7 gap-6'>
+            <motion.div className='h-[200px] border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'
+              onClick={toggleAddTeam}
+              whileHover={{
+                scale:1.05
+              }}
+
+            >
+              <span className='text-[35px]'><FaPlus /></span>
+            </motion.div>
+              {allTeams?.map((ele, i)=>(
+                <TeamsList 
+                  
+                  key={ele?.id}
+                  ele = {ele}
+                  teamActionValue = {teamActionValue}
+                  handleChangeTeamAction= {handleChangeTeamAction}
+                  updateTeamColor= {updateTeamColor}
+                  handleTeamActionList= {handleTeamActionList}
+                  handleViewTeam = {handleViewTeam}
+
+                />
+              ))}
+          </div>
         </div>
-
-        <div className='grid grid-cols-7 gap-6'>
-          <motion.div className='h-[200px] border-dashed border-[1px] border-customBlack-400 rounded-lg flex items-center justify-center cursor-pointer'
-            onClick={toggleAddTeam}
-            whileHover={{
-              scale:1.05
-            }}
-
-          >
-            <span className='text-[35px]'><FaPlus /></span>
-          </motion.div>
-            {allTeams?.map((ele, i)=>(
-              <TeamsList 
-                
-                key={ele?.id}
-                ele = {ele}
-                teamActionValue = {teamActionValue}
-                handleChangeTeamAction= {handleChangeTeamAction}
-                updateTeamColor= {updateTeamColor}
-                handleTeamActionList= {handleTeamActionList}
-                handleViewTeam = {handleViewTeam}
-
-              />
-            ))}
-        </div>
-      </div>
+      }
       {createTeamValue.show &&
         <CustomDrawer 
           open={createTeamValue.show}

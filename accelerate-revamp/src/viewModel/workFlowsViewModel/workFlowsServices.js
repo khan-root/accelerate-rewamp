@@ -6,6 +6,7 @@ const useWorkFlowsServices = ()=>{
 
     const workFlows = useStore((state)=> state.workFlows)
     const gettingWorkFlows = useStore((state)=> state.gettingWorkFlows)
+    const workflowLoading = useStore((state)=> state.workflowLoading)
 
 
     const [toggleStateValue, setToggleStateValue] = useState(1)
@@ -91,7 +92,8 @@ const useWorkFlowsServices = ()=>{
         handleViewTemplate,
         handleToggleViewTemplate,
         viewTemplate,
-        handleToggleSubViewTemplate
+        handleToggleSubViewTemplate,
+        workflowLoading
     }
 }
 

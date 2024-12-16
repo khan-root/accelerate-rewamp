@@ -5,6 +5,7 @@ const homeServices = (set, get)=>({
 
     homeTaskData:{},
     notificationData:[],
+    homeLoading:false,
 
 
     getInComingTasks: async(data)=>{
@@ -23,10 +24,10 @@ const homeServices = (set, get)=>({
         // }
     },
     gettingHomeTask: async(data)=>{
+        set({homeLoading: true})
         try{
             const response = await homeApi.homeTask(data)
             const responseData = response.data 
-            console.log('response***********', response)
             if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
                 const dbData = responseData.DB_DATA 
                 set({
@@ -35,6 +36,23 @@ const homeServices = (set, get)=>({
             }
         }catch(err){
             console.log('err', err)
+        }finally{
+            set({homeLoading: false})
+        }
+    },
+    gettingHomeTaskByMont: async(data)=>{
+        try{
+            const response = await homeApi.homeTask(data)
+            const responseData = response.data 
+            if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
+                const dbData = responseData.DB_DATA 
+                set({
+                    homeTaskData: dbData
+                })
+            }
+        }catch(err){
+            console.log('err', err)
+        }finally{
         }
     },
     gettingNotifications: async()=>{

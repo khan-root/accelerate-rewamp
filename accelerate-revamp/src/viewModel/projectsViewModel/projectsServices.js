@@ -4,6 +4,7 @@ import useStore from "../../Store/Store"
 const useProjectsServices = ()=>{
     const gettingProjects = useStore((state)=> state.gettingProjects)
     const projects = useStore((state)=> state.projects)
+    const projectLoading = useStore((state)=> state.projectLoading)
 
     const [projectState, setProjectState] = useState({
         state:'active', 
@@ -41,7 +42,7 @@ const useProjectsServices = ()=>{
     },[projectState])
 
 
-    return { projectState, toggleProjectsState,handleChangeSerachProjects,projects }
+    return { projectState, toggleProjectsState,handleChangeSerachProjects,projects,projectLoading }
 
 }
 

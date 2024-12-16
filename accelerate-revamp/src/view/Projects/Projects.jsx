@@ -13,9 +13,10 @@ import AddProject from './AddProject'
 import useProjectDetailsServices from '../../viewModel/projectsViewModel/projectDetailsServices'
 import { Outlet, useParams } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
+import { Progress } from '@material-tailwind/react'
 
 const Projects = () => {
-  const { projectState, toggleProjectsState, handleChangeSerachProjects, projects} = useProjectsServices()
+  const { projectState, toggleProjectsState, handleChangeSerachProjects, projects, projectLoading} = useProjectsServices()
   const { addProjectValue, handleAddProject, toggleAddProject,toggleGeneralTemplateViewAdd,
     handleAddOwnerToggle,handleAddWorkFlowToggle,
     handleChangeAddProject,addExtraPhase,removePhase,
@@ -38,6 +39,7 @@ const Projects = () => {
    const params = useParams()
 
   const projectsData = projects?.projects_details
+  const graphTask = projects?.graph?.tasks
   return (
     <>
     {params?.id ? <Outlet 
@@ -46,11 +48,12 @@ const Projects = () => {
     /> : 
     
       <>
+      
       <div className='px-10 py-5 space-y-6 '>
         <div className='text-[20px] text-customBlack-300'>
           <span>Projects</span>
         </div>
-        <div className='grid grid-cols-12 border-[.5px] border-customBlack-400 rounded-lg py-6 px-8'>
+        <div className='grid grid-cols-12 border-[.5px] border-customBlack-400 rounded-lg py-6 px-8 items-center gap-6'>
           <div className='col-span-6 flex items-center justify-between'>
             <div className='flex items-center gap-4'>
               <div>
@@ -60,7 +63,7 @@ const Projects = () => {
               </div>
               <div className='flex flex-col items-center gap-1 text-customBlack-300'>
                 <span className='text-[18px]'>Projects</span>
-                <span className='text-[16px]'> 30 Total</span>
+                <span className='text-[16px]'> {projectsData?.total} Total</span>
               </div>
             </div>
             <div className='w-[1px] h-[70%] bg-customBlack-300'></div>
@@ -71,8 +74,8 @@ const Projects = () => {
                 </span>
               </div>
               <div className='flex flex-col items-center gap-1 text-customBlack-300'>
-                <span className='text-[18px]'>28 Active</span>
-                <span className='text-[16px]'> 2 Inactive</span>
+                <span className='text-[18px]'>{projectsData?.active} Active</span>
+                <span className='text-[16px]'> {projectsData?.total - projectsData?.active} Inactive</span>
               </div>
             </div>
             <div className='w-[1px] h-[70%] bg-customBlack-300'></div>
@@ -84,11 +87,36 @@ const Projects = () => {
               </div>
               <div className='flex flex-col items-center gap-1  text-customBlack-300'>
                 <span className='text-[18px]'>Tasks</span>
-                <span className='text-[16px]'> 572 Total</span>
+                <span className='text-[16px]'> {projectsData?.total_tasks} Total</span>
               </div>
             </div>
           </div>
-          <div className='col-span-6'>right</div>
+          <div className='col-span-6 grid grid-cols-3 gap-5'>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.PENDING_TASKS} Tasks Pending</span>
+              <Progress value={graphTask?.PENDING_TASKS} color="yellow" />
+            </div>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.COMPLETED_TASKS} Tasks Completed</span>
+              <Progress value={graphTask?.COMPLETED_TASKS} color="green" />
+            </div>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.OVERDUE_TASKS} Tasks Overdue</span>
+              <Progress value={graphTask?.OVERDUE_TASKS} color="red" />
+            </div>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.CANCELED_TASKS} Tasks Cancelled</span>
+              <Progress value={graphTask?.CANCELED_TASKS} color="" />
+            </div>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.REJECTED_BY_MANAGER} Tasks Rejected</span>
+              <Progress value={graphTask?.REJECTED_BY_MANAGER} color="" />
+            </div>
+            <div className='text-[12px] space-y-3'>
+              <span>{graphTask?.PAUSED} Tasks Paused</span>
+              <Progress value={graphTask?.PAUSED} color="" />
+            </div>
+          </div>
         </div>
         <div className='flex gap-4 items-center'>
           <div className="w-full max-w-sm min-w-[200px]">

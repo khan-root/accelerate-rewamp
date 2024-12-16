@@ -8,6 +8,7 @@ const useTeamsServices = ()=>{
 
     const allTeams = useStore((state)=> state.allTeams)
     const gettingAllTeams = useStore((state)=> state.gettingAllTeams)
+    const teamLoading = useStore((state)=> state.teamLoading)
 
 
     const [viewTeamValue, setViewTeamValue] = useState({
@@ -177,7 +178,8 @@ const useTeamsServices = ()=>{
         toggleViewTeam,
         setViewTeamValue,
         addNewMember, handleInviteMember,handleBulkEmailInvite ,handleRemoveEmailInvite,
-        handleNewMember
+        handleNewMember,
+        teamLoading
     }
 
 }

@@ -4,13 +4,15 @@ import { motion } from 'framer-motion'
 import { toggleDataWorkFlows } from '../../utils/workFlowsUtils'
 import GeneralWorkFlow from './GeneralWorkFlow'
 import UserWorkFlows from './UserWorkFlows'
+import WorkflowSkeleton from '../../Skeleton/WorkflowSkeleton'
 
 
 
 const WorkFlows = () => {
     
     const {workFlows, gettingWorkFlows, handleToggleStateValue, toggleStateValue,handleViewTemplate,
-        viewTemplate,handleToggleViewTemplate,handleToggleSubViewTemplate
+        viewTemplate,handleToggleViewTemplate,handleToggleSubViewTemplate,
+        workflowLoading
 
     } = useWorkFlowsServices()
 
@@ -25,6 +27,10 @@ const WorkFlows = () => {
     },[])
 
   return (
+    <>
+    {workflowLoading ? 
+        <WorkflowSkeleton />
+        :
     <div className='px-10 py-5 space-y-6'>
         <div className='text-[20px] text-customBlack-300'>
             <span>WorkFlows</span>
@@ -80,6 +86,8 @@ const WorkFlows = () => {
         </div>
 
     </div>
+}
+    </>
   )
 }
 

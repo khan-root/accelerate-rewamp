@@ -2,12 +2,12 @@ import teamsApi from "../../Model/Teams/Teams"
 
 const teamsServices = (set, get)=>({
     allTeams:[],
-
+    teamLoading:false,
 
     gettingAllTeams:async()=>{
+        set({teamLoading: true})
         try {
             const response = await teamsApi.getTeams()
-            console.log('response', response) 
             const responseData = response.data 
             if(response.status === 200 && responseData.STATUS === "SUCCESSFUL"){
                 const dbData = responseData.DB_DATA 
@@ -15,6 +15,8 @@ const teamsServices = (set, get)=>({
             }
         } catch (error) {
             
+        }finally{
+            set({teamLoading: false})
         }
     },
     updatingTeamColor: (id, color)=>{
